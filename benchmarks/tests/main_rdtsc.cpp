@@ -1,6 +1,7 @@
 #include <vector>
 #include <limits>
 #include <string>
+#include <x86intrin.h>
 
 #include "matrixutils.h"
 #include "munkres-cpp/munkres.h"
