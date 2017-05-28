@@ -97,10 +97,10 @@ bool Munkres<T>::find_uncovered_in_matrix (matrix_base<T> & matrix, const T item
     const size_t rows = matrix.rows (),
                  columns = matrix.columns ();
 
-    for (row = 0; row < rows; row++) {
-        if (!row_mask[row]) {
-            for (col = 0; col < columns; col++) {
-                if (!col_mask[col]) {
+    for (col = 0; col < columns; col++) {
+        if (!col_mask[col]) {
+            for (row = 0; row < rows; row++) {
+                if (!row_mask[row]) {
                     if (matrix (row,col) == item) {
                         return true;
                     }
@@ -147,8 +147,8 @@ int Munkres<T>::step2 (matrix_base<T> & matrix)
                  columns = matrix.columns ();
     size_t covercount = 0;
 
-    for (size_t row = 0; row < rows; row++)
-        for (size_t col = 0; col < columns; col++)
+    for (size_t col = 0; col < columns; col++)
+        for (size_t row = 0; row < rows; row++)
             if (STAR == mask_matrix (row, col) ) {
                 col_mask[col] = true;
                 covercount++;
@@ -163,8 +163,8 @@ int Munkres<T>::step2 (matrix_base<T> & matrix)
 
     #ifdef DEBUG
     std::cout << "Munkres matrix has " << covercount << " of " << matrix.minsize () << " Columns covered:" << std::endl;
-    for (size_t row = 0; row < rows; row++) {
-        for (size_t col = 0; col < columns; col++) {
+    for (size_t col = 0; col < columns; col++) {
+        for (size_t row = 0; row < rows; row++) {
             std::cout.width (8);
             std::cout << matrix (row, col) << ",";
         }
@@ -276,8 +276,8 @@ int Munkres<T>::step4 (matrix_base<T> & matrix)
     }
 
     // 4. Erase all primes, uncover all columns and rows,
-    for (size_t row = 0; row < mask_matrix.rows (); row++) {
-        for (size_t col = 0; col < mask_matrix.columns (); col++) {
+    for (size_t col = 0; col < mask_matrix.columns (); col++) {
+        for (size_t row = 0; row < mask_matrix.rows (); row++) {
             if (mask_matrix (row,col) == PRIME) {
                 mask_matrix (row,col) = NORMAL;
             }
@@ -305,10 +305,10 @@ int Munkres<T>::step5 (matrix_base<T> & matrix)
     // 3. Subtract h from all uncovered columns
     // 4. Return to Step 3, without altering stars, primes, or covers.
     T h = std::numeric_limits<T>::max ();
-    for (size_t row = 0; row < rows; row++) {
-        if (!row_mask[row]) {
-            for (size_t col = 0; col < columns; col++) {
-                if (!col_mask[col]) {
+    for (size_t col = 0; col < columns; col++) {
+        if (!col_mask[col]) {
+            for (size_t row = 0; row < rows; row++) {
+                if (!row_mask[row]) {
                     if (h > matrix (row, col) && matrix (row, col) != 0) {
                         h = matrix (row, col);
                     }
@@ -405,8 +405,8 @@ void Munkres<T>::solve (matrix_base<T> & matrix)
     }
 
     // Store results.
-    for (size_t row = 0; row < size; row++) {
-        for (size_t col = 0; col < size; col++) {
+    for (size_t col = 0; col < size; col++) {
+        for (size_t row = 0; row < size; row++) {
             matrix (row, col) = mask_matrix (row, col) == STAR ? 0 : 1;
         }
     }

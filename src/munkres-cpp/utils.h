@@ -28,8 +28,8 @@ void replace_infinites (matrix_base<T> & matrix)
     constexpr auto infinity = std::numeric_limits<T>::infinity ();
 
     // Find the greatest value in the matrix that isn't infinity.
-    for (size_t row = 0; row < rows; row++) {
-        for (size_t col = 0; col < columns; col++) {
+    for (size_t col = 0; col < columns; col++) {
+        for (size_t row = 0; row < rows; row++) {
             if (matrix (row, col) != infinity) {
                 if (max == infinity) {
                     max = matrix (row, col);
@@ -48,8 +48,8 @@ void replace_infinites (matrix_base<T> & matrix)
         max++;
     }
 
-    for (size_t row = 0; row < rows; row++) {
-        for (size_t col = 0; col < columns; col++) {
+    for (size_t col = 0; col < columns; col++) {
+        for (size_t row = 0; row < rows; row++) {
             if (matrix (row, col) == infinity) {
                 matrix (row, col) = max;
             }
@@ -64,8 +64,8 @@ bool is_data_valid (matrix_base<T> & matrix)
 {
     // Check if present negative values?
     if (std::numeric_limits<T>::is_signed) {
-        for (size_t i = 0; i < matrix.rows (); ++i) {
-            for (size_t j = 0; j < matrix.columns (); ++j) {
+        for (size_t j = 0; j < matrix.columns (); ++j) {
+            for (size_t i = 0; i < matrix.rows (); ++i) {
                 if (matrix (i, j) < T (0) ) {
                     return false;
                 }
@@ -75,8 +75,8 @@ bool is_data_valid (matrix_base<T> & matrix)
 
     // Check if present non normal (NaN, inf, etc.) values?
     if (!std::numeric_limits<T>::is_integer) {
-        for (size_t i = 0; i < matrix.rows (); ++i) {
-            for (size_t j = 0; j < matrix.columns (); ++j) {
+        for (size_t j = 0; j < matrix.columns (); ++j) {
+            for (size_t i = 0; i < matrix.rows (); ++i) {
                 const auto x = std::fpclassify (matrix (i, j) );
                 if (x != FP_ZERO && x != FP_NORMAL) {
                     return false;

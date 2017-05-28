@@ -58,8 +58,8 @@ class matrix_base
         virtual value_type max () const
         {
             value_type max_elem = rows () && columns () ? operator () (0, 0) : zero;
-            for (size_t i = 0; i < rows (); ++i) {
-                for (size_t j = 0; j < columns (); ++j) {
+            for (size_t j = 0; j < columns (); ++j) {
+                for (size_t i = 0; i < rows (); ++i) {
                     max_elem = std::max<value_type>( max_elem, operator () (i, j) );
                 }
             }

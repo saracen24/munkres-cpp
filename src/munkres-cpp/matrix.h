@@ -112,8 +112,8 @@ Matrix<T>::Matrix (const Matrix<T> & other)
         // Copy arrays.
         m_matrix = nullptr;
         resize (other.m_rows, other.m_columns);
-        for (size_t i = 0; i < m_rows; i++) {
-            for (size_t j = 0; j < m_columns; j++) {
+        for (size_t j = 0; j < m_columns; j++) {
+            for (size_t i = 0; i < m_rows; i++) {
                 m_matrix[i][j] = other.m_matrix[i][j];
             }
         }
@@ -141,8 +141,8 @@ Matrix<T> & Matrix<T>::operator= (const Matrix<T> & other)
     if (other.m_matrix != nullptr) {
         // Copy arrays.
         resize (other.m_rows, other.m_columns);
-        for (size_t i = 0; i < m_rows; i++) {
-            for (size_t j = 0; j < m_columns; j++) {
+        for (size_t j = 0; j < m_columns; j++) {
+            for (size_t i = 0; i < m_rows; i++) {
                 m_matrix[i][j] = other.m_matrix[i][j];
             }
         }
@@ -213,8 +213,8 @@ void Matrix<T>::resize (const size_t rows, const size_t columns, const T default
         // Copy data from saved pointer to new arrays.
         const size_t minrows = std::min (rows, m_rows);
         const size_t mincols = std::min (columns, m_columns);
-        for (size_t x = 0; x < minrows; x++) {
-            for (size_t y = 0; y < mincols; y++) {
+        for (size_t y = 0; y < mincols; y++) {
+            for (size_t x = 0; x < minrows; x++) {
                 new_matrix[x][y] = m_matrix[x][y];
             }
         }
@@ -241,8 +241,8 @@ void Matrix<T>::clear ()
 {
     assert (m_matrix != nullptr);
 
-    for (size_t i = 0; i < m_rows; i++) {
-        for (size_t j = 0; j < m_columns; j++) {
+    for (size_t j = 0; j < m_columns; j++) {
+        for (size_t i = 0; i < m_rows; i++) {
             m_matrix [i][j] = 0;
         }
     }
@@ -281,8 +281,8 @@ T Matrix<T>::min () const
 
     T min = m_matrix [0][0];
 
-    for (size_t i = 0; i < m_rows; i++) {
-        for (size_t j = 0; j < m_columns; j++) {
+    for (size_t j = 0; j < m_columns; j++) {
+        for (size_t i = 0; i < m_rows; i++) {
             min = std::min<T>(min, m_matrix [i][j]);
         }
     }
@@ -299,8 +299,8 @@ T Matrix<T>::max () const
 
     T max = m_matrix [0][0];
 
-    for (size_t i = 0; i < m_rows; i++) {
-        for (size_t j = 0; j < m_columns; j++) {
+    for (size_t j = 0; j < m_columns; j++) {
+        for (size_t i = 0; i < m_rows; i++) {
             max = std::max<T>(max, m_matrix [i][j]);
         }
     }
