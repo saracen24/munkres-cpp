@@ -29,7 +29,7 @@
 namespace munkres_cpp
 {
 
-template<class T>
+template<typename T>
 class matrix_base
 {
     public:
@@ -94,6 +94,12 @@ class matrix_base
             return is_equal (operator () (row, column), zero, typename std::is_integral<value_type>::type () );
         }
 };
+
+template<typename T>
+constexpr T matrix_base<T>::zero;
+
+template<typename T>
+constexpr T matrix_base<T>::max_val;
 
 }// namespace munkres_cpp
 
