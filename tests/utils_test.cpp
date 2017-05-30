@@ -48,17 +48,34 @@ TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case001_Success)
         {-1.0,      0.0,      2.0,      3.0}
     };
     Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0,     infinity,  2.0l},
-        {infinity, -2.0,     -1.0l,     0.0l},
-        {-1.0,     infinity,  2.0l,     0.0l},
-        {-1.0,      0.0,      2.0l, infinity}
+        { 1.0,      0.0,     infinity,  2.0},
+        {infinity, -2.0,     -1.0,      0.0},
+        {-1.0,     infinity,  2.0,      0.0},
+        {-1.0,      0.0,      2.0, infinity}
     };
 
     // Act.
     munkres_cpp::replace_infinites (test_matrix);
 
     // Assert.
-    EXPECT_EQ (etalon_matrix, test_matrix);
+    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
+    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
+    for (size_t j = 0; j < test_matrix.columns (); ++j) {
+        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+            if ( (i == 0 && j == 2)
+              || (i == 1 && j == 0)
+              || (i == 2 && j == 1)
+              || (i == 3 && j == 3) ) {
+                SCOPED_TRACE (i);
+                SCOPED_TRACE (j);
+                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
+                EXPECT_TRUE (test_matrix (i, j) > TypeParam (2.0) );
+            }
+            else {
+                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+            }
+        }
+    }
 }
 
 
@@ -84,7 +101,28 @@ TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case002_Success)
     munkres_cpp::replace_infinites (test_matrix);
 
     // Assert.
-    EXPECT_EQ (etalon_matrix, test_matrix);
+    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
+    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
+    for (size_t j = 0; j < test_matrix.columns (); ++j) {
+        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+            if ( (i == 0 && j == 0)
+              || (i == 0 && j == 2)
+              || (i == 1 && j == 0)
+              || (i == 1 && j == 3)
+              || (i == 2 && j == 1)
+              || (i == 2 && j == 3)
+              || (i == 3 && j == 1)
+              || (i == 3 && j == 3) ) {
+                SCOPED_TRACE (i);
+                SCOPED_TRACE (j);
+                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
+                EXPECT_TRUE (test_matrix (i, j) > TypeParam (2.0) );
+            }
+            else {
+                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+            }
+        }
+    }
 }
 
 
@@ -110,7 +148,24 @@ TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case003_Success)
     munkres_cpp::replace_infinites (test_matrix);
 
     // Assert.
-    EXPECT_EQ (etalon_matrix, test_matrix);
+    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
+    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
+    for (size_t j = 0; j < test_matrix.columns (); ++j) {
+        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+            if ( (i == 0 && j == 2)
+              || (i == 1 && j == 0)
+              || (i == 2 && j == 1)
+              || (i == 3 && j == 3) ) {
+                SCOPED_TRACE (i);
+                SCOPED_TRACE (j);
+                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
+                EXPECT_TRUE (test_matrix (i, j) > TypeParam (-2.0) );
+            }
+            else {
+                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+            }
+        }
+    }
 }
 
 
@@ -136,7 +191,24 @@ TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case004_Success)
     munkres_cpp::replace_infinites (test_matrix);
 
     // Assert.
-    EXPECT_EQ (etalon_matrix, test_matrix);
+    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
+    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
+    for (size_t j = 0; j < test_matrix.columns (); ++j) {
+        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+            if ( (i == 0 && j == 2)
+              || (i == 1 && j == 0)
+              || (i == 2 && j == 1)
+              || (i == 3 && j == 3) ) {
+                SCOPED_TRACE (i);
+                SCOPED_TRACE (j);
+                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
+                EXPECT_TRUE (test_matrix (i, j) > TypeParam (-2.0) );
+            }
+            else {
+                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+            }
+        }
+    }
 }
 
 
@@ -156,6 +228,61 @@ TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case005_Success)
         {infinity, infinity, infinity, infinity},
         {infinity, infinity, infinity, infinity},
         {infinity, infinity, infinity, infinity}
+    };
+
+    // Act.
+    munkres_cpp::replace_infinites (test_matrix);
+
+    // Assert.
+    EXPECT_EQ (etalon_matrix, test_matrix);
+}
+
+
+
+TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case006_Success)
+{
+    // Arrange.
+    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
+    const auto max = std::numeric_limits<TypeParam>::max ();
+    Matrix<TypeParam> etalon_matrix {
+        { 1.0,      0.0,      max,      max},
+        { max,     -2.0,     -1.0,      0.0},
+        {-1.0,      max,      0.0,      0.0},
+        {-1.0,      0.0,      0.0,      max}
+    };
+    Matrix<TypeParam> test_matrix {
+        { 1.0,      0.0,     infinity,  max},
+        {infinity, -2.0,     -1.0,      0.0},
+        {-1.0,     infinity,  0.0,      0.0},
+        {-1.0,      0.0,      0.0, infinity}
+    };
+
+    // Act.
+    munkres_cpp::replace_infinites (test_matrix);
+
+    // Assert.
+    EXPECT_EQ (etalon_matrix, test_matrix);
+}
+
+
+
+TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case007_Success)
+{
+    // Arrange.
+    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
+    const auto max = std::numeric_limits<TypeParam>::max ();
+    const auto premax = std::nextafter (std::numeric_limits<TypeParam>::max (), 0);
+    Matrix<TypeParam> etalon_matrix {
+        { 1.0,      0.0,      max,      0.0},
+        { max,     -2.0,     -1.0,   premax},
+        {-1.0,      max,      0.0,      0.0},
+        {-1.0,      0.0,      0.0,      max}
+    };
+    Matrix<TypeParam> test_matrix {
+        { 1.0,      0.0,     infinity,  0.0},
+        {infinity, -2.0,     -1.0,   premax},
+        {-1.0,     infinity,  0.0,      0.0},
+        {-1.0,      0.0,      0.0, infinity}
     };
 
     // Act.

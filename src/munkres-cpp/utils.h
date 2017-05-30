@@ -11,76 +11,60 @@ namespace munkres_cpp
 {
 
 template<typename T>
-void replace_infinites (matrix_base<T> & matrix)
+constexpr void replace_infinites (matrix_base<T> &, std::true_type)
 {
-    if (!std::numeric_limits<T>::has_infinity) {
-        return;
-    }
+}
 
-    const size_t rows = matrix.rows (),
-                 columns = matrix.columns ();
-
-    if (!rows || !columns) {
-        return;
-    }
-
-    T max = matrix (0, 0);
-    constexpr auto infinity = std::numeric_limits<T>::infinity ();
-
+template<typename T>
+void replace_infinites (matrix_base<T> & matrix, std::false_type)
+{
     // Find the greatest value in the matrix that isn't infinity.
-    for (size_t col = 0; col < columns; col++) {
-        for (size_t row = 0; row < rows; row++) {
-            if (matrix (row, col) != infinity) {
-                if (max == infinity) {
-                    max = matrix (row, col);
-                } else {
-                    max = std::max<T>( max, matrix (row, col) );
-                }
+    T max = matrix_base<T>::zero;
+    for (size_t j = 0; j < matrix.columns (); j++) {
+        for (size_t i = 0; i < matrix.rows (); i++) {
+            if (std::isfinite (matrix (i, j) ) && matrix (i, j) > max) {
+                max = std::nextafter (matrix (i, j), std::numeric_limits<T>::max () );
             }
         }
     }
 
-    // A value higher than the maximum value present in the matrix.
-    if (max == infinity) {
-        // This case only occurs when all values are infinite.
-        max = 0;
-    } else {
-        max++;
-    }
-
-    for (size_t col = 0; col < columns; col++) {
-        for (size_t row = 0; row < rows; row++) {
-            if (matrix (row, col) == infinity) {
-                matrix (row, col) = max;
+    for (size_t j = 0; j < matrix.columns (); j++) {
+        for (size_t i = 0; i < matrix.rows (); i++) {
+            if (std::isinf (matrix (i, j) ) ) {
+                matrix (i, j) = max;
             }
         }
     }
 }
 
+template<typename T>
+void replace_infinites (matrix_base<T> & matrix)
+{
+    replace_infinites (matrix, typename std::is_integral<T>::type () );
+}
+
 
 
 template<typename T>
-bool is_data_valid (matrix_base<T> & matrix)
+constexpr bool is_data_valid (const T & value, std::true_type)
 {
-    // Check if present negative values?
-    if (std::numeric_limits<T>::is_signed) {
-        for (size_t j = 0; j < matrix.columns (); ++j) {
-            for (size_t i = 0; i < matrix.rows (); ++i) {
-                if (matrix (i, j) < T (0) ) {
-                    return false;
-                }
-            }
-        }
-    }
+    return std::numeric_limits<T>::is_signed && value >= matrix_base<T>::zero;
+}
 
-    // Check if present non normal (NaN, inf, etc.) values?
-    if (!std::numeric_limits<T>::is_integer) {
-        for (size_t j = 0; j < matrix.columns (); ++j) {
-            for (size_t i = 0; i < matrix.rows (); ++i) {
-                const auto x = std::fpclassify (matrix (i, j) );
-                if (x != FP_ZERO && x != FP_NORMAL) {
-                    return false;
-                }
+template<typename T>
+constexpr bool is_data_valid (const T & value, std::false_type)
+{
+    return value >= matrix_base<T>::zero
+        && (std::fpclassify (value) == FP_ZERO || std::fpclassify (value) == FP_NORMAL);
+}
+
+template<typename T>
+bool is_data_valid (const matrix_base<T> & matrix)
+{
+    for (size_t j = 0; j < matrix.columns (); ++j) {
+        for (size_t i = 0; i < matrix.rows (); ++i) {
+            if (!is_data_valid (matrix (i, j), typename std::is_integral<T>::type () ) ) {
+                return false;
             }
         }
     }

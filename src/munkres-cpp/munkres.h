@@ -40,8 +40,8 @@ class Munkres
 
     private:
         static constexpr char NORMAL = 0;
-        static constexpr char STAR = 1;
-        static constexpr char PRIME = 2;
+        static constexpr char STAR   = 1;
+        static constexpr char PRIME  = 2;
         inline bool find_uncovered_in_matrix (matrix_base<T> &, const T, size_t &, size_t &) const;
         int step1 (matrix_base<T> &);
         int step2 (matrix_base<T> &);
@@ -50,10 +50,11 @@ class Munkres
         int step5 (matrix_base<T> &);
         int step6 (matrix_base<T> &);
 
-        Matrix<char> mask_matrix;
-        bool * row_mask;
-        bool * col_mask;
-        size_t saverow, savecol;
+        Matrix<char> mask_matrix {};
+        bool * row_mask = nullptr;
+        bool * col_mask = nullptr;
+        size_t saverow  = 0;
+        size_t savecol  = 0;
 };
 
 
@@ -101,7 +102,7 @@ bool Munkres<T>::find_uncovered_in_matrix (matrix_base<T> & matrix, const T item
         if (!col_mask[col]) {
             for (row = 0; row < rows; row++) {
                 if (!row_mask[row]) {
-                    if (matrix (row,col) == item) {
+                    if (matrix.is_equal (row,col, item) ) {
                         return true;
                     }
                 }
@@ -122,7 +123,7 @@ int Munkres<T>::step1 (matrix_base<T> & matrix)
 
     for (size_t row = 0; row < rows; row++) {
         for (size_t col = 0; col < columns; col++) {
-            if (0 == matrix (row, col) ) {
+            if (matrix.is_zero (row, col) ) {
                 for (size_t nrow = 0; nrow < row; nrow++)
                     if (STAR == mask_matrix (nrow,col) )
                         goto next_column;
@@ -309,7 +310,7 @@ int Munkres<T>::step5 (matrix_base<T> & matrix)
         if (!col_mask[col]) {
             for (size_t row = 0; row < rows; row++) {
                 if (!row_mask[row]) {
-                    if (h > matrix (row, col) && matrix (row, col) != 0) {
+                    if (h > matrix (row, col) && !matrix.is_zero (row, col) ) {
                         h = matrix (row, col);
                     }
                 }
