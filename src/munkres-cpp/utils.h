@@ -11,12 +11,8 @@ namespace munkres_cpp
 {
 
 template<typename T>
-constexpr void replace_infinites (matrix_base<T> &, std::true_type)
-{
-}
-
-template<typename T>
-void replace_infinites (matrix_base<T> & matrix, std::false_type)
+typename std::enable_if<std::is_floating_point<T>::value, void>::type
+replace_infinites (matrix_base<T> & matrix)
 {
     // Find the greatest value in the matrix that isn't infinity.
     T max = matrix_base<T>::zero;
@@ -37,25 +33,20 @@ void replace_infinites (matrix_base<T> & matrix, std::false_type)
     }
 }
 
-template<typename T>
-void replace_infinites (matrix_base<T> & matrix)
-{
-    replace_infinites (matrix, typename std::is_integral<T>::type () );
-}
-
 
 
 template<typename T>
-constexpr bool is_data_valid (const T & value, std::true_type)
+typename std::enable_if<std::is_integral<T>::value, bool>::type
+is_data_invalid (const T & value)
 {
-    return std::numeric_limits<T>::is_signed && value >= matrix_base<T>::zero;
+    return std::numeric_limits<T>::is_signed && value < matrix_base<T>::zero;
 }
 
 template<typename T>
-constexpr bool is_data_valid (const T & value, std::false_type)
+typename std::enable_if<!std::is_integral<T>::value, bool>::type
+is_data_invalid (const T & value)
 {
-    return value >= matrix_base<T>::zero
-        && (std::fpclassify (value) == FP_ZERO || std::fpclassify (value) == FP_NORMAL);
+    return value < matrix_base<T>::zero || !(std::fpclassify (value) == FP_ZERO || std::fpclassify (value) == FP_NORMAL);
 }
 
 template<typename T>
@@ -63,7 +54,7 @@ bool is_data_valid (const matrix_base<T> & matrix)
 {
     for (size_t j = 0; j < matrix.columns (); ++j) {
         for (size_t i = 0; i < matrix.rows (); ++i) {
-            if (!is_data_valid (matrix (i, j), typename std::is_integral<T>::type () ) ) {
+            if (is_data_invalid (matrix (i, j) ) ) {
                 return false;
             }
         }
@@ -71,6 +62,7 @@ bool is_data_valid (const matrix_base<T> & matrix)
 
     return true;
 }
+
 
 }// namespace munkres_cpp
 

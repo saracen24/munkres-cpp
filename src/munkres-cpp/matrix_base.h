@@ -35,8 +35,6 @@ class matrix_base
     public:
         // Types.
         using value_type = T;
-        template <typename> struct integer_traits : std::false_type {};
-        template <typename> struct integer_tratis : std::true_type  {};
 
         // Constants.
         static constexpr value_type zero = value_type (0);
@@ -74,24 +72,23 @@ class matrix_base
             return rows () < columns () ? rows () : columns ();
         }
 
-        static constexpr bool is_equal (const value_type & element, const value_type & value, const std::true_type &)
+        template <typename X = value_type>
+        constexpr typename std::enable_if<std::is_integral<X>::value, bool>::type
+        is_equal (const size_t row, const size_t column, const X & value) const
         {
-            return element == value;
+            return operator () (row, column) == value;
         }
 
-        static constexpr bool is_equal (const value_type & element, const value_type & value, const std::false_type &)
+        template <typename X = value_type>
+        constexpr typename std::enable_if<!std::is_integral<X>::value, bool>::type
+        is_equal (const size_t row, const size_t column, const X & value) const
         {
-            return FP_ZERO == std::fpclassify (element - value);
-        }
-
-        bool is_equal (const size_t row, const size_t column, const value_type & value) const
-        {
-            return is_equal (operator () (row, column), value, typename std::is_integral<value_type>::type () );
+            return FP_ZERO == std::fpclassify (operator () (row, column) - value);
         }
 
         bool is_zero (const size_t row, const size_t column) const
         {
-            return is_equal (operator () (row, column), zero, typename std::is_integral<value_type>::type () );
+            return is_equal (row, column, zero);
         }
 };
 

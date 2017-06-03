@@ -92,7 +92,7 @@ class matrix_boost_adapter : public munkres_cpp::matrix_base<T>, boost::numeric:
 int main (int /*argc*/, char * /*argv*/[])
 {
     // Set input data (costs matrix) into your adapter.
-    matrix_boost_adapter<int> data (2, 3);
+    matrix_boost_adapter<float> data (2, 3);
     // The library can manage with non-square matrices.
     // In such case the library resize the input matrix and fill
     // new cells by sensible data.
@@ -111,7 +111,7 @@ int main (int /*argc*/, char * /*argv*/[])
     // correct and ready for processing.
     if (munkres_cpp::is_data_valid (data) ) {
         // Next you need create the problem solver.
-        munkres_cpp::Munkres<int> solver;
+        munkres_cpp::Munkres<float> solver;
         // And apply Munkres algorithm to data.
         solver.solve (data);
 
