@@ -17,7 +17,7 @@ class MunkresTestAll : public ::testing::Test
             // Initialize matrix with random values.
             for (unsigned int row = 0; row < matrix.rows (); row++)
                 for (unsigned int col = 0; col < matrix.columns (); col++)
-                    matrix (row,col) = static_cast <T> (random () );
+                    matrix (row,col) = std::abs (static_cast <T> (random () ) );
 
             return matrix;
         }
