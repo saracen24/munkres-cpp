@@ -30,7 +30,7 @@ class matrix_opencv : public matrix_base<T>, cv::Mat_<T>
 {
     public:
         matrix_opencv (const size_t rows, const size_t columns)
-            : cv::Mat_<T>::Mat_ (rows, columns)
+            : cv::Mat_<T>::Mat_ (rows, columns, cv::DataType<T>::type)
         {
         }
 

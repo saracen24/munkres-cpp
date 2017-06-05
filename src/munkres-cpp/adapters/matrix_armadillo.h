@@ -26,7 +26,7 @@ namespace munkres_cpp
 {
 
 template<class T>
-class matrix_armadillo : public matrix_base<T>, arma::Mat<T>
+class matrix_armadillo : public matrix_base<T>, public arma::Mat<T>
 {
     public:
         matrix_armadillo (const size_t rows, const size_t columns)

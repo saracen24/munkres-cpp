@@ -4,107 +4,89 @@
 
 
 
-template <typename T>
-class UtilsTestSigned : public ::testing::Test
-{
-};
-
-typedef ::testing::Types <
-    signed                  char
-  , signed      short       int
-  , signed                  int
-  , signed      long        int
-  , signed      long long   int
-  , float
-  , double
-  , long double> TypesSigned;
-
-TYPED_TEST_CASE (UtilsTestSigned, TypesSigned);
-
-
-
-template <typename T>
-class UtilsTestFloating : public ::testing::Test
-{
-};
-
-typedef ::testing::Types <
-    float
-  , double
-  , long double> TypesFloating;
-
-TYPED_TEST_CASE (UtilsTestFloating, TypesFloating);
-
-
-
-TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case001_Success)
+template<typename TypeParam>
+void replace_infinities_4x4Case001_Success ()
 {
     // Arrange.
-    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
-    Matrix<TypeParam> etalon_matrix {
-        { 1.0,      0.0,      3.0,      2.0},
-        { 3.0,     -2.0,     -1.0,      0.0},
-        {-1.0,      3.0,      2.0,      0.0},
-        {-1.0,      0.0,      2.0,      3.0}
-    };
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0,     infinity,  2.0},
-        {infinity, -2.0,     -1.0,      0.0},
-        {-1.0,     infinity,  2.0,      0.0},
-        {-1.0,      0.0,      2.0, infinity}
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    TypeParam e (4, 4);
+    e(0, 0)= 1.0;  e(0, 1)= 0.0;  e(0, 2)= 3.0;  e(0, 3)= 2.0;
+    e(1, 0)= 3.0;  e(1, 1)=-2.0;  e(1, 2)=-1.0;  e(1, 3)= 0.0;
+    e(2, 0)=-1.0;  e(2, 1)= 3.0;  e(2, 2)= 2.0;  e(2, 3)= 0.0;
+    e(3, 0)=-1.0;  e(3, 1)= 0.0;  e(3, 2)= 2.0;  e(3, 3)= 3.0;
+
+    TypeParam t (4, 4);
+    t(0, 0)= 1.0;  t(0, 1)= 0.0;  t(0, 2)= infinity;
+                                                 t(0, 3)= 2.0;
+    t(1, 0)=infinity;
+                   t(1, 1)=-2.0;  t(1, 2)=-1.0;  t(1, 3)= 0.0;
+    t(2, 0)=-1.0;  t(2, 1)=infinity;
+                                  t(2, 2)= 2.0;  t(2, 3)= 0.0;
+    t(3, 0)=-1.0;  t(3, 1)= 0.0;  t(3, 2)= 2.0;  t(3, 3)=infinity;
 
     // Act.
-    munkres_cpp::replace_infinites (test_matrix);
+    munkres_cpp::replace_infinites (t);
 
     // Assert.
-    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
-    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
-    for (size_t j = 0; j < test_matrix.columns (); ++j) {
-        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+    ASSERT_EQ (e.rows (), t.rows ());
+    ASSERT_EQ (e.columns (), t.columns ());
+    for (size_t j = 0; j < t.columns (); ++j) {
+        for (size_t i = 0; i < t.rows (); ++i) {
             if ( (i == 0 && j == 2)
               || (i == 1 && j == 0)
               || (i == 2 && j == 1)
               || (i == 3 && j == 3) ) {
                 SCOPED_TRACE (i);
                 SCOPED_TRACE (j);
-                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
-                EXPECT_TRUE (test_matrix (i, j) > TypeParam (2.0) );
+                EXPECT_TRUE (std::isfinite (t (i, j) ) );
+                EXPECT_TRUE (t (i, j) > value_type (2.0) );
             }
             else {
-                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+                EXPECT_EQ (e (i, j), t (i, j) );
             }
         }
     }
 }
 
+TYPED_TEST (MunkresTestFloating, replace_infinities_4x4Case001_Success)
+{
+    replace_infinities_4x4Case001_Success<TypeParam> ();
+}
 
 
-TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case002_Success)
+
+template<typename TypeParam>
+void replace_infinities_4x4Case002_Success ()
 {
     // Arrange.
-    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
-    Matrix<TypeParam> etalon_matrix {
-        { 3.0,      0.0,      3.0,      2.0},
-        { 3.0,     -2.0,     -1.0,      3.0},
-        {-1.0,      3.0,      2.0,      3.0},
-        {-1.0,      3.0,      2.0,      3.0}
-    };
-    Matrix<TypeParam> test_matrix {
-        {infinity,  0.0,     infinity,  2.0},
-        {infinity, -2.0,     -1.0, infinity},
-        {-1.0,     infinity,  2.0, infinity},
-        {-1.0,     infinity,  2.0, infinity}
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    TypeParam e (4, 4);
+    e(0, 0)= 3.0;  e(0, 1)= 0.0;  e(0, 2)= 3.0;  e(0, 3)= 2.0;
+    e(1, 0)= 3.0;  e(1, 1)=-2.0;  e(1, 2)=-1.0;  e(1, 3)= 3.0;
+    e(2, 0)=-1.0;  e(2, 1)= 3.0;  e(2, 2)= 2.0;  e(2, 3)= 3.0;
+    e(3, 0)=-1.0;  e(3, 1)= 3.0;  e(3, 2)= 2.0;  e(3, 3)= 3.0;
+
+    TypeParam t (4, 4);
+    t(0, 0)=infinity;
+                   t(0, 1)= 0.0;  t(0, 2)= infinity;
+                                                 t(0, 3)= 2.0;
+    t(1, 0)=infinity;
+                   t(1, 1)=-2.0;  t(1, 2)=-1.0;  t(1, 3)=infinity;
+    t(2, 0)=-1.0;  t(2, 1)=infinity;
+                                  t(2, 2)= 2.0;  t(2, 3)=infinity;
+    t(3, 0)=-1.0;  t(3, 1)=infinity;
+                                  t(3, 2)= 2.0;  t(3, 3)=infinity;
 
     // Act.
-    munkres_cpp::replace_infinites (test_matrix);
+    munkres_cpp::replace_infinites (t);
 
     // Assert.
-    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
-    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
-    for (size_t j = 0; j < test_matrix.columns (); ++j) {
-        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+    ASSERT_EQ (e.rows (), t.rows ());
+    ASSERT_EQ (e.columns (), t.columns ());
+    for (size_t j = 0; j < t.columns (); ++j) {
+        for (size_t i = 0; i < t.rows (); ++i) {
             if ( (i == 0 && j == 0)
               || (i == 0 && j == 2)
               || (i == 1 && j == 0)
@@ -115,264 +97,378 @@ TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case002_Success)
               || (i == 3 && j == 3) ) {
                 SCOPED_TRACE (i);
                 SCOPED_TRACE (j);
-                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
-                EXPECT_TRUE (test_matrix (i, j) > TypeParam (2.0) );
+                EXPECT_TRUE (std::isfinite (t (i, j) ) );
+                EXPECT_TRUE (t (i, j) > value_type (2.0) );
             }
             else {
-                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+                EXPECT_EQ (e (i, j), t (i, j) );
             }
         }
     }
 }
 
+TYPED_TEST (MunkresTestFloating, replace_infinities_4x4Case002_Success)
+{
+    replace_infinities_4x4Case002_Success<TypeParam> ();
+}
 
 
-TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case003_Success)
+
+template<typename TypeParam>
+void replace_infinities_4x4Case003_Success ()
 {
     // Arrange.
-    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
-    Matrix<TypeParam> etalon_matrix {
-        {-5.0,     -4.0,     -1.0,     -2.0},
-        {-1.0,     -2.0,     -5.0,     -4.0},
-        {-5.0,     -1.0,     -2.0,     -4.0},
-        {-5.0,     -4.0,     -2.0,     -1.0}
-    };
-    Matrix<TypeParam> test_matrix {
-        {-5.0,     -4.0,     infinity, -2.0},
-        {infinity, -2.0,     -5.0,     -4.0},
-        {-5.0,     infinity, -2.0,     -4.0},
-        {-5.0,     -4.0,     -2.0, infinity}
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    TypeParam e (4, 4);
+    e(0, 0)=-5.0;  e(0, 1)=-4.0;  e(0, 2)=-1.0;  e(0, 3)=-2.0;
+    e(1, 0)=-1.0;  e(1, 1)=-2.0;  e(1, 2)=-5.0;  e(1, 3)=-4.0;
+    e(2, 0)=-5.0;  e(2, 1)=-1.0;  e(2, 2)=-2.0;  e(2, 3)=-4.0;
+    e(3, 0)=-5.0;  e(3, 1)=-4.0;  e(3, 2)=-2.0;  e(3, 3)=-1.0;
+
+    TypeParam t (4, 4);
+    t(0, 0)=-5.0;  t(0, 1)=-4.0;  t(0, 2)= infinity;
+                                                 t(0, 3)=-2.0;
+    t(1, 0)=infinity;
+                   t(1, 1)=-2.0;  t(1, 2)=-5.0;  t(1, 3)=-4.0;
+    t(2, 0)=-5.0;  t(2, 1)=infinity;
+                                  t(2, 2)=-2.0;  t(2, 3)=-4.0;
+    t(3, 0)=-5.0;  t(3, 1)=-4.0;  t(3, 2)=-2.0;  t(3, 3)=infinity;
 
     // Act.
-    munkres_cpp::replace_infinites (test_matrix);
+    munkres_cpp::replace_infinites (t);
 
     // Assert.
-    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
-    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
-    for (size_t j = 0; j < test_matrix.columns (); ++j) {
-        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+    ASSERT_EQ (e.rows (), t.rows ());
+    ASSERT_EQ (e.columns (), t.columns ());
+    for (size_t j = 0; j < t.columns (); ++j) {
+        for (size_t i = 0; i < t.rows (); ++i) {
             if ( (i == 0 && j == 2)
               || (i == 1 && j == 0)
               || (i == 2 && j == 1)
               || (i == 3 && j == 3) ) {
                 SCOPED_TRACE (i);
                 SCOPED_TRACE (j);
-                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
-                EXPECT_TRUE (test_matrix (i, j) > TypeParam (-2.0) );
+                EXPECT_TRUE (std::isfinite (t (i, j) ) );
+                EXPECT_TRUE (t (i, j) > value_type (-2.0) );
             }
             else {
-                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+                EXPECT_EQ (e (i, j), t (i, j) );
             }
         }
     }
 }
 
+TYPED_TEST (MunkresTestFloating, replace_infinities_4x4Case003_Success)
+{
+    replace_infinities_4x4Case003_Success<TypeParam> ();
+}
 
 
-TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case004_Success)
+
+template<typename TypeParam>
+void replace_infinities_4x4Case004_Success ()
 {
     // Arrange.
-    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
-    Matrix<TypeParam> etalon_matrix {
-        { 1.0,      0.0,      3.0,      2.0},
-        { 3.0,     -2.0,     -1.0,      0.0},
-        {-1.0,      3.0,      0.0,      0.0},
-        {-1.0,      0.0,      0.0,      3.0}
-    };
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0,     infinity,  2.0},
-        {infinity, -2.0,     -1.0,      0.0},
-        {-1.0,     infinity,  0.0,      0.0},
-        {-1.0,      0.0,      0.0, infinity}
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    TypeParam e (4, 4);
+    e(0, 0)= 1.0;  e(0, 1)= 0.0;  e(0, 2)= 3.0;  e(0, 3)= 2.0;
+    e(1, 0)= 3.0;  e(1, 1)=-2.0;  e(1, 2)=-1.0;  e(1, 3)= 0.0;
+    e(2, 0)=-1.0;  e(2, 1)= 3.0;  e(2, 2)= 0.0;  e(2, 3)= 0.0;
+    e(3, 0)=-1.0;  e(3, 1)= 0.0;  e(3, 2)= 0.0;  e(3, 3)= 3.0;
+
+    TypeParam t (4, 4);
+    t(0, 0)= 1.0;  t(0, 1)= 0.0;  t(0, 2)= infinity;
+                                                 t(0, 3)= 2.0;
+    t(1, 0)=infinity;
+                   t(1, 1)=-2.0;  t(1, 2)=-1.0;  t(1, 3)= 0.0;
+    t(2, 0)=-1.0;  t(2, 1)=infinity;
+                                  t(2, 2)= 0.0;  t(2, 3)= 0.0;
+    t(3, 0)=-1.0;  t(3, 1)= 0.0;  t(3, 2)= 0.0;  t(3, 3)=infinity;
 
     // Act.
-    munkres_cpp::replace_infinites (test_matrix);
+    munkres_cpp::replace_infinites (t);
 
     // Assert.
-    ASSERT_EQ (etalon_matrix.rows (), test_matrix.rows ());
-    ASSERT_EQ (etalon_matrix.columns (), test_matrix.columns ());
-    for (size_t j = 0; j < test_matrix.columns (); ++j) {
-        for (size_t i = 0; i < test_matrix.rows (); ++i) {
+    ASSERT_EQ (e.rows (), t.rows ());
+    ASSERT_EQ (e.columns (), t.columns ());
+    for (size_t j = 0; j < t.columns (); ++j) {
+        for (size_t i = 0; i < t.rows (); ++i) {
             if ( (i == 0 && j == 2)
               || (i == 1 && j == 0)
               || (i == 2 && j == 1)
               || (i == 3 && j == 3) ) {
                 SCOPED_TRACE (i);
                 SCOPED_TRACE (j);
-                EXPECT_TRUE (std::isfinite (test_matrix (i, j) ) );
-                EXPECT_TRUE (test_matrix (i, j) > TypeParam (-2.0) );
+                EXPECT_TRUE (std::isfinite (t (i, j) ) );
+                EXPECT_TRUE (t (i, j) > value_type (2.0) );
             }
             else {
-                EXPECT_EQ (etalon_matrix (i, j), test_matrix (i, j) );
+                EXPECT_EQ (e (i, j), t (i, j) );
             }
         }
     }
 }
 
+TYPED_TEST (MunkresTestFloating, replace_infinities_4x4Case004_Success)
+{
+    replace_infinities_4x4Case004_Success<TypeParam> ();
+}
 
 
-TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case005_Success)
+
+template<typename TypeParam>
+void replace_infinities_4x4Case005_Success ()
 {
     // Arrange.
-    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
-    Matrix<TypeParam> etalon_matrix {
-        {     0.0,      0.0,      0.0,      0.0},
-        {     0.0,      0.0,      0.0,      0.0},
-        {     0.0,      0.0,      0.0,      0.0},
-        {     0.0,      0.0,      0.0,      0.0}
-    };
-    Matrix<TypeParam> test_matrix {
-        {infinity, infinity, infinity, infinity},
-        {infinity, infinity, infinity, infinity},
-        {infinity, infinity, infinity, infinity},
-        {infinity, infinity, infinity, infinity}
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    TypeParam e (4, 4);
+    e(0, 0)= 0.0;  e(0, 1)= 0.0;  e(0, 2)= 0.0;  e(0, 3)= 0.0;
+    e(1, 0)= 0.0;  e(1, 1)= 0.0;  e(1, 2)= 0.0;  e(1, 3)= 0.0;
+    e(2, 0)= 0.0;  e(2, 1)= 0.0;  e(2, 2)= 0.0;  e(2, 3)= 0.0;
+    e(3, 0)= 0.0;  e(3, 1)= 0.0;  e(3, 2)= 0.0;  e(3, 3)= 0.0;
+
+    TypeParam t (4, 4);
+    t(0, 0)=infinity;
+                   t(0, 1)=infinity;
+                                  t(0, 2)=infinity;
+                                                 t(0, 3)=infinity;
+    t(1, 0)=infinity;
+                   t(1, 1)=infinity;
+                                  t(1, 2)=infinity;
+                                                 t(1, 3)=infinity;
+    t(2, 0)=infinity;
+                   t(2, 1)=infinity;
+                                  t(2, 2)=infinity;
+                                                 t(2, 3)=infinity;
+    t(3, 0)=infinity;
+                   t(3, 1)=infinity;
+                                  t(3, 2)=infinity;
+                                                 t(3, 3)=infinity;
 
     // Act.
-    munkres_cpp::replace_infinites (test_matrix);
+    munkres_cpp::replace_infinites (t);
 
     // Assert.
-    EXPECT_EQ (etalon_matrix, test_matrix);
+    EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
+}
+
+TYPED_TEST (MunkresTestFloating, replace_infinities_4x4Case005_Success)
+{
+    replace_infinities_4x4Case005_Success<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case006_Success)
+template<typename TypeParam>
+void replace_infinities_4x4Case006_Success ()
 {
     // Arrange.
-    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
-    const auto max = std::numeric_limits<TypeParam>::max ();
-    Matrix<TypeParam> etalon_matrix {
-        { 1.0,      0.0,      max,      max},
-        { max,     -2.0,     -1.0,      0.0},
-        {-1.0,      max,      0.0,      0.0},
-        {-1.0,      0.0,      0.0,      max}
-    };
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0,     infinity,  max},
-        {infinity, -2.0,     -1.0,      0.0},
-        {-1.0,     infinity,  0.0,      0.0},
-        {-1.0,      0.0,      0.0, infinity}
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    constexpr value_type max      = std::numeric_limits<value_type>::max ();
+    TypeParam e (4, 4);
+    e(0, 0)= 1.0;  e(0, 1)= 0.0;  e(0, 2)= max;  e(0, 3)= max;
+    e(1, 0)= max;  e(1, 1)=-2.0;  e(1, 2)=-1.0;  e(1, 3)= 0.0;
+    e(2, 0)=-1.0;  e(2, 1)= max;  e(2, 2)= 0.0;  e(2, 3)= 0.0;
+    e(3, 0)=-1.0;  e(3, 1)= 0.0;  e(3, 2)= 0.0;  e(3, 3)= max;
+
+    TypeParam t (4, 4);
+    t(0, 0)= 1.0;  t(0, 1)= 0.0;  t(0, 2)= infinity;
+                                                 t(0, 3)= max;
+    t(1, 0)=infinity;
+                   t(1, 1)=-2.0;  t(1, 2)=-1.0;  t(1, 3)= 0.0;
+    t(2, 0)=-1.0;  t(2, 1)=infinity;
+                                  t(2, 2)= 0.0;  t(2, 3)= 0.0;
+    t(3, 0)=-1.0;  t(3, 1)= 0.0;  t(3, 2)= 0.0;  t(3, 3)=infinity;
 
     // Act.
-    munkres_cpp::replace_infinites (test_matrix);
+    munkres_cpp::replace_infinites (t);
 
     // Assert.
-    EXPECT_EQ (etalon_matrix, test_matrix);
+    EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
+}
+
+TYPED_TEST (MunkresTestFloating, replace_infinities_4x4Case006_Success)
+{
+    replace_infinities_4x4Case006_Success<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestFloating, replace_infinites_4x4Case007_Success)
+template<typename TypeParam>
+void replace_infinities_4x4Case007_Success ()
 {
     // Arrange.
-    const auto infinity = std::numeric_limits<TypeParam>::infinity ();
-    const auto max = std::numeric_limits<TypeParam>::max ();
-    const auto premax = std::nextafter (std::numeric_limits<TypeParam>::max (), 0);
-    Matrix<TypeParam> etalon_matrix {
-        { 1.0,      0.0,      max,      0.0},
-        { max,     -2.0,     -1.0,   premax},
-        {-1.0,      max,      0.0,      0.0},
-        {-1.0,      0.0,      0.0,      max}
-    };
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0,     infinity,  0.0},
-        {infinity, -2.0,     -1.0,   premax},
-        {-1.0,     infinity,  0.0,      0.0},
-        {-1.0,      0.0,      0.0, infinity}
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    constexpr value_type max      = std::numeric_limits<value_type>::max ();
+    const     value_type premax   = std::nextafter (std::numeric_limits<value_type>::max (), 0);
+    TypeParam e (4, 4);
+    e(0, 0)= 1.0;  e(0, 1)= 0.0;  e(0, 2)= max;  e(0, 3)= 0.0;
+    e(1, 0)= max;  e(1, 1)=-2.0;  e(1, 2)=-1.0;  e(1, 3)=premax;
+    e(2, 0)=-1.0;  e(2, 1)= max;  e(2, 2)= 0.0;  e(2, 3)= 0.0;
+    e(3, 0)=-1.0;  e(3, 1)= 0.0;  e(3, 2)= 0.0;  e(3, 3)= max;
+
+    TypeParam t (4, 4);
+    t(0, 0)= 1.0;  t(0, 1)= 0.0;  t(0, 2)= infinity;
+                                                 t(0, 3)= 0.0;
+    t(1, 0)=infinity;
+                   t(1, 1)=-2.0;  t(1, 2)=-1.0;  t(1, 3)=premax;
+    t(2, 0)=-1.0;  t(2, 1)=infinity;
+                                  t(2, 2)= 0.0;  t(2, 3)= 0.0;
+    t(3, 0)=-1.0;  t(3, 1)= 0.0;  t(3, 2)= 0.0;  t(3, 3)=infinity;
 
     // Act.
-    munkres_cpp::replace_infinites (test_matrix);
+    munkres_cpp::replace_infinites (t);
 
     // Assert.
-    EXPECT_EQ (etalon_matrix, test_matrix);
+    EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
+}
+
+TYPED_TEST (MunkresTestFloating, replace_infinities_4x4Case007_Success)
+{
+    replace_infinities_4x4Case007_Success<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestSigned, is_data_valid_Success)
+template<typename TypeParam>
+void is_data_valid_Success ()
 {
     // Arrange.
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0},
-        { 3.0,      2.0},
-    };
+    TypeParam m (2, 2);
+    m(0, 0)= 1.0;  m(0, 1)= 0.0;
+    m(1, 0)= 3.0;  m(1, 1)= 2.0;
 
     // Act, Assert.
-    EXPECT_TRUE (munkres_cpp::is_data_valid (test_matrix) );
+    EXPECT_TRUE (munkres_cpp::is_data_valid (m) );
+}
+
+TYPED_TEST (MunkresTestMatrixMunkres, is_data_valid_Success)
+{
+    is_data_valid_Success<TypeParam> ();
+}
+
+TYPED_TEST (MunkresTestMatrixArmadillo, is_data_valid_Success)
+{
+    is_data_valid_Success<TypeParam> ();
+}
+
+TYPED_TEST (MunkresTestMatrixBoost, is_data_valid_Success)
+{
+    is_data_valid_Success<TypeParam> ();
+}
+
+TYPED_TEST (MunkresTestMatrixEigen, is_data_valid_Success)
+{
+    is_data_valid_Success<TypeParam> ();
+}
+
+TYPED_TEST (MunkresTestMatrixOpencv, is_data_valid_Success)
+{
+    is_data_valid_Success<TypeParam> ();
+}
+
+TYPED_TEST (MunkresTestMatrixStd2dvector, is_data_valid_Success)
+{
+    is_data_valid_Success<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestSigned, is_data_valid_negative_Failed)
+template<typename TypeParam>
+void is_data_valid_negative_Failed ()
 {
     // Arrange.
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0},
-        { 3.0,     -2.0},
-    };
+    TypeParam m (2, 2);
+    m(0, 0)= 1.0;  m(0, 1)= 0.0;
+    m(1, 0)= 3.0;  m(1, 1)=-2.0;
 
     // Act, Assert.
-    EXPECT_FALSE (munkres_cpp::is_data_valid (test_matrix) );
+    EXPECT_FALSE (munkres_cpp::is_data_valid (m) );
+}
+
+TYPED_TEST (MunkresTestSigned, is_data_valid_negative_Failed)
+{
+    is_data_valid_negative_Failed<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestFloating, is_data_valid_infinity_Failed)
+template<typename TypeParam>
+void is_data_valid_infinity_Failed ()
 {
     // Arrange.
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0},
-        { 3.0,      std::numeric_limits<TypeParam>::infinity ()},
-    };
+    TypeParam m (2, 2);
+    m(0, 0)= 1.0;  m(0, 1)= 0.0;
+    m(1, 0)= 3.0;  m(1, 1)= std::numeric_limits<typename TypeParam::matrix_base::value_type>::infinity ();
 
     // Act, Assert.
-    EXPECT_FALSE (munkres_cpp::is_data_valid (test_matrix) );
+    EXPECT_FALSE (munkres_cpp::is_data_valid (m) );
+}
+
+TYPED_TEST (MunkresTestFloating, is_data_valid_infinity_Failed)
+{
+    is_data_valid_infinity_Failed<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestFloating, is_data_valid_minus_infinity_Failed)
+template<typename TypeParam>
+void is_data_valid_minus_infinity_Failed ()
 {
     // Arrange.
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0},
-        { 3.0,    - std::numeric_limits<TypeParam>::infinity ()},
-    };
+    TypeParam m (2, 2);
+    m(0, 0)= 1.0;  m(0, 1)= 0.0;
+    m(1, 0)= 3.0;  m(1, 1)=-std::numeric_limits<typename TypeParam::matrix_base::value_type>::infinity ();
 
     // Act, Assert.
-    EXPECT_FALSE (munkres_cpp::is_data_valid (test_matrix) );
+    EXPECT_FALSE (munkres_cpp::is_data_valid (m) );
+}
+
+TYPED_TEST (MunkresTestFloating, is_data_valid_minus_infinity_Failed)
+{
+    is_data_valid_minus_infinity_Failed<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestFloating, is_data_valid_NaN_Failed)
+template<typename TypeParam>
+void is_data_valid_NaN_Failed ()
 {
     // Arrange.
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0},
-        { 3.0,      std::numeric_limits<TypeParam>::quiet_NaN ()},
-    };
+    TypeParam m (2, 2);
+    m(0, 0)= 1.0;  m(0, 1)= 0.0;
+    m(1, 0)= 3.0;  m(1, 1)=-std::numeric_limits<typename TypeParam::matrix_base::value_type>::quiet_NaN ();
 
     // Act, Assert.
-    EXPECT_FALSE (munkres_cpp::is_data_valid (test_matrix) );
+    EXPECT_FALSE (munkres_cpp::is_data_valid (m) );
+}
+
+TYPED_TEST (MunkresTestFloating, is_data_valid_NaN_Failed)
+{
+    is_data_valid_NaN_Failed<TypeParam> ();
 }
 
 
 
-TYPED_TEST (UtilsTestFloating, is_data_valid_denormalized_Failed)
+template<typename TypeParam>
+void is_data_valid_denormalized_Failed ()
 {
     // Arrange.
-    Matrix<TypeParam> test_matrix {
-        { 1.0,      0.0},
-        { 3.0,      std::numeric_limits<TypeParam>::min () / TypeParam (2.0)},
-    };
+    using value_type = typename TypeParam::matrix_base::value_type;
+    TypeParam m (2, 2);
+    m(0, 0)= 1.0;  m(0, 1)= 0.0;
+    m(1, 0)= 3.0;  m(1, 1)=-std::numeric_limits<value_type>::min () / value_type (2.0);
 
     // Act, Assert.
-    EXPECT_FALSE (munkres_cpp::is_data_valid (test_matrix) );
+    EXPECT_FALSE (munkres_cpp::is_data_valid (m) );
 }
 
+TYPED_TEST (MunkresTestFloating, is_data_valid_denormalized_Failed)
+{
+    is_data_valid_denormalized_Failed<TypeParam> ();
+}

@@ -29,6 +29,10 @@ template<class T, const int N, const int M>
 class matrix_qt : public matrix_base<T>, QGenericMatrix<N, M, T>
 {
     public:
+        matrix_qt (const size_t, const size_t)
+        {
+        }
+
         const T & operator () (const size_t row, const size_t column) const override
         {
             return QGenericMatrix<N, M, T>::operator () (row, column);

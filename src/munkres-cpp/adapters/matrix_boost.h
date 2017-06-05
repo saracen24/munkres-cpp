@@ -26,7 +26,7 @@ namespace munkres_cpp
 {
 
 template<class T>
-class matrix_boost : public matrix_base<T>, boost::numeric::ublas::matrix<T>
+class matrix_boost : public matrix_base<T>, public boost::numeric::ublas::matrix<T>
 {
     public:
         matrix_boost (const size_t rows, const size_t columns)

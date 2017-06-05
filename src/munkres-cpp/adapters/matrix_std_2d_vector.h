@@ -30,48 +30,52 @@ class matrix_std_2d_vector : public matrix_base<T>
 {
     public:
         matrix_std_2d_vector (std::vector<std::vector<T>> & data)
-            : data {data}
+            : data_handler {data}
         {
+        }
+
+        matrix_std_2d_vector (const size_t rows, const size_t columns)
+            : data_storage {}
+            , data_handler {data_storage}
+        {
+            resize (rows, columns);
         }
 
         const T & operator () (const size_t row, const size_t column) const override
         {
-            return data [row][column];
+            return data_handler [row][column];
         };
 
         T & operator () (const size_t row, const size_t column) override
         {
-            return data [row][column];
+            return data_handler [row][column];
         }
 
         size_t columns () const override
         {
-            size_t columns = data.size () ? data [0].size () : 0;
-            for (size_t i = 0; i < data.size (); ++i) {
-                columns = std::min (columns, data [i].size () );
+            size_t columns = data_handler.size () ? data_handler [0].size () : 0;
+            for (size_t i = 0; i < data_handler.size (); ++i) {
+                columns = std::min (columns, data_handler [i].size () );
             }
             return columns;
         }
 
         size_t rows () const override
         {
-            return data.size ();
+            return data_handler.size ();
         }
 
         void resize (const size_t rows, const size_t columns, const T value = matrix_base<T>::zero) override
         {
-            if (rows != this->rows () ) {
-                data.resize (rows);
-                if (columns != this->columns () ) {
-                    for (size_t i = 0; i < rows; ++i) {
-                        data [i].resize (columns, value);
-                    }
-                }
+            data_handler.resize (rows);
+            for (size_t i = 0; i < rows; ++i) {
+                data_handler [i].resize (columns, value);
             }
         }
 
     private:
-        std::vector<std::vector<T>> & data;
+        std::vector<std::vector<T>>   data_storage;
+        std::vector<std::vector<T>> & data_handler;
 };
 
 }// namespace munkres_cpp

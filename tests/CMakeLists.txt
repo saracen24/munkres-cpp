@@ -41,43 +41,30 @@ set (
     ${PROJECT_SOURCE_DIR}/tests/munkres_test.cpp
     ${PROJECT_SOURCE_DIR}/tests/matrix_test.cpp
     ${PROJECT_SOURCE_DIR}/tests/utils_test.cpp
-    ${PROJECT_SOURCE_DIR}/tests/adapters/matrix_std_2d_vector_test.cpp
 )
+
+add_executable (munkrestest EXCLUDE_FROM_ALL ${MunkresCppTest_SOURCES})
+
 if (ARMADILLO_FOUND)
-set (
-    MunkresCppTest_SOURCES ${MunkresCppTest_SOURCES}
-    ${PROJECT_SOURCE_DIR}/tests/adapters/matrix_armadillo_test.cpp
-)
+    target_compile_definitions (munkrestest PRIVATE -DMUNKRES_CPP_ARMADILLO)
 endif ()
 if (Boost_FOUND)
-set (
-    MunkresCppTest_SOURCES ${MunkresCppTest_SOURCES}
-    ${PROJECT_SOURCE_DIR}/tests/adapters/matrix_boost_test.cpp
-)
+    target_compile_definitions (munkrestest PRIVATE -DMUNKRES_CPP_BOOST)
 endif ()
 if (EIGEN3_FOUND)
-set (
-    MunkresCppTest_SOURCES ${MunkresCppTest_SOURCES}
-    ${PROJECT_SOURCE_DIR}/tests/adapters/matrix_eigen_test.cpp
-)
+    target_compile_definitions (munkrestest PRIVATE -DMUNKRES_CPP_EIGEN3)
 endif ()
 if (OpenCV_FOUND)
-set (
-    MunkresCppTest_SOURCES ${MunkresCppTest_SOURCES}
-    ${PROJECT_SOURCE_DIR}/tests/adapters/matrix_opencv_test.cpp
-)
+    target_compile_definitions (munkrestest PRIVATE -DMUNKRES_CPP_OPENCV)
 endif ()
 if (Qt5Gui_FOUND)
-set (
-    MunkresCppTest_SOURCES ${MunkresCppTest_SOURCES}
-    ${PROJECT_SOURCE_DIR}/tests/adapters/matrix_qt_test.cpp
-)
-set (
-    Qt_LIBRARIES
-    Qt5::Gui
-)
+    target_compile_definitions (munkrestest PRIVATE -DMUNKRES_CPP_QT)
+    set (
+        Qt_LIBRARIES
+        Qt5::Gui
+    )
 endif ()
-add_executable (munkrestest EXCLUDE_FROM_ALL ${MunkresCppTest_SOURCES})
+
 target_link_libraries (
     munkrestest
     ${GTEST_BOTH_LIBRARIES}
