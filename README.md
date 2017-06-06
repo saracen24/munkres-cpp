@@ -1,8 +1,8 @@
 munkres-cpp
 ===========
 
-[![build status](https://gitlab.com/Gluttton/munkres-cpp/badges/master/build.svg)](https://gitlab.com/Gluttton/munkres-cpp/commits/master)
-[![coverage report](https://gitlab.com/Gluttton/munkres-cpp/badges/master/coverage.svg)](https://gitlab.com/Gluttton/munkres-cpp/commits/master)
+[![build status](https://gitlab.com/Gluttton/munkres-cpp/badges/devel/build.svg)](https://gitlab.com/Gluttton/munkres-cpp/commits/devel)
+[![coverage report](https://gitlab.com/Gluttton/munkres-cpp/badges/devel/coverage.svg)](https://gitlab.com/Gluttton/munkres-cpp/commits/devel)
 
 
 An implementation of the Kuhn–Munkres algorithm.
@@ -22,17 +22,6 @@ Requires
 
 For using:  
  - C++ compiler with C++11 support.  
-
-
-For development:  
- - [GCC](https://gcc.gnu.org/) (tested on 4.6.3, 4.8);  
- - [GNU Make](https://www.gnu.org/software/make/);  
- - [CMake](http://www.cmake.org/) (2.8.12);  
- - the test suite requires the [Google C++ Test Framework](http://code.google.com/p/googletest/);  
- - microbenchmaring requires [Benchmark](https://github.com/google/benchmark), [Celero](https://github.com/DigitalInBlue/Celero), [Hayai](https://github.com/nickbruun/hayai) and [gprof](http://www.gnu.org/software/binutils/);  
- - code coverage requires [gcov](https://gcc.gnu.org/onlinedocs/gcc/Gcov.html) and lcov;  
- - static code analysis requires [cppcheck](https://github.com/danmar/cppcheck);  
- - source code formatting requires [uncrustify](http://uncrustify.sourceforge.net).  
 
 
 
@@ -79,6 +68,18 @@ Examples subfolder contains set of examples which step-by-step show usage of the
 
 Development
 -----------
+
+Requirements:  
+ - [GCC](https://gcc.gnu.org/) (tested on 4.6.3, 4.8);  
+ - [GNU Make](https://www.gnu.org/software/make/);  
+ - [CMake](http://www.cmake.org/) (2.8.12);  
+ - the test suite requires the [Google C++ Test Framework](http://code.google.com/p/googletest/);  
+ - microbenchmaring requires [Benchmark](https://github.com/google/benchmark), [Celero](https://github.com/DigitalInBlue/Celero), [Hayai](https://github.com/nickbruun/hayai) and [gprof](http://www.gnu.org/software/binutils/);  
+ - code coverage requires [gcov](https://gcc.gnu.org/onlinedocs/gcc/Gcov.html) and lcov;  
+ - static code analysis requires [cppcheck](https://github.com/danmar/cppcheck);  
+ - source code formatting requires [uncrustify](http://uncrustify.sourceforge.net).  
+
+
 
 For development purpose in the project implemented a variety of build targets.
 All of them help to continuously check correctness of algorithm implementation, performance, memory management, etc.
