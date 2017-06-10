@@ -1,11 +1,12 @@
-image: registry.gitlab.com/gluttton/munkres-cpp
 stages:
     - test
     - full
+    - image
 
 
 test_job:
     stage: test
+    image: registry.gitlab.com/gluttton/munkres-cpp
     before_script:
         - git checkout devel
         - BUILD_DIR=`pwd`/build
@@ -17,10 +18,13 @@ test_job:
         - cd ${BUILD_DIR}/tests && ./munkrestest > /dev/null
         - cd ${BUILD_DIR}
         - gcovr --exclude 'tests' --exclude 'build' -r ..
+    only:
+        - devel
 
 
 full_job:
     stage: full
+    image: registry.gitlab.com/gluttton/munkres-cpp
     before_script:
         - git checkout devel
         - BUILD_DIR=`pwd`/build
@@ -30,3 +34,22 @@ full_job:
     script:
         - make examples
         - make benchmarks
+    only:
+        - devel
+
+
+image_job:
+    stage: image
+    image: docker:latest
+    variables:
+        DOCKER_DRIVER: overlay
+    services:
+        - docker:dind
+    before_script:
+        - docker info
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+        - docker build -t registry.gitlab.com/gluttton/munkres-cpp .
+        - docker push registry.gitlab.com/gluttton/munkres-cpp
+    only:
+        - docker
