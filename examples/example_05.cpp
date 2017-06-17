@@ -98,8 +98,8 @@ int main (int /*argc*/, char * /*argv*/[])
     // new cells by sensible data.
     //           Task I           Task II
     data (0, 0) = 1; data (0, 1) = 2;   // Worker I
-    data (0, 0) = 0; data (0, 1) = 9;   // Worker II
-    data (0, 0) = 9; data (0, 1) = 9;   // Worker III
+    data (1, 0) = 0; data (1, 1) = 9;   // Worker II
+    data (2, 0) = 9; data (2, 1) = 9;   // Worker III
     // You are totally responsible for correctness of the input data.
     // Input data must be positive and well defined (no NaN or infinity).
 
