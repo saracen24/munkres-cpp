@@ -72,7 +72,7 @@ int main (int /*argc*/, char * /*argv*/[])
     boost::numeric::ublas::matrix<double> data (2, 2);
     // Set input data (costs matrix).
     data (0, 0) = 1.0; data (0, 1) = 3.0;
-    data (0, 0) = 5.0; data (0, 1) = 9.0;
+    data (1, 0) = 5.0; data (1, 1) = 9.0;
     // Don't forget! you are responsible for correctness of the input data.
 
     // Create data adapter and pass your container to it.

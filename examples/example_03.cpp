@@ -34,7 +34,7 @@ int main (int /*argc*/, char * /*argv*/[])
     // Set input data (costs matrix).
     munkres_cpp::matrix_boost<double> data (2, 2);
     data (0, 0) = 1.0; data (0, 1) = 3.0;
-    data (0, 0) = 5.0; data (0, 1) = 9.0;
+    data (1, 0) = 5.0; data (1, 1) = 9.0;
     // Don't forget! you are responsible for correctness of the input data.
 
     // Create the solver and apply the algorithm to data.
