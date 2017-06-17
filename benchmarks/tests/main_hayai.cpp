@@ -33,7 +33,6 @@ BENCHMARK_F (MunkresFixture, Solve, 5000, 1)
 
 
 
-// Main function.
 int main (int /*argc*/, char * /*argv*/ [])
 {
     read<double>(matrices);

@@ -5,7 +5,6 @@
 
 
 
-// Main function.
 int main (int /*argc*/, char * /*argv*/ [])
 {
     std::vector<munkres_cpp::Matrix<double> *> matrices;

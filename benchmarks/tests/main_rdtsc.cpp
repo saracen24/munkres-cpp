@@ -8,14 +8,13 @@
 
 
 
-// Main function.
 int main (int argc, char * argv [])
 {
     std::vector<munkres_cpp::Matrix<double> *> matrices;
     read<double>(matrices);
 
 
-    size_t iterations = 1000;
+    size_t iterations = 5000;
     size_t runs = 10;
     if (3 == argc) {
         runs = std::stoi (argv [1]);

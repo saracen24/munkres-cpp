@@ -33,14 +33,6 @@ BASELINE_F (Munkres, Solve, MunkresFixture, 5000, 1)
 
 
 
-BENCHMARK_F (Munkres, Solve, MunkresFixture, 5000, 1)
-{
-    munkres.solve (matrix);
-}
-
-
-
-// Main function.
 int main (int argc, char * argv [])
 {
     read<double>(matrices);

@@ -8,32 +8,33 @@
 
 std::vector<munkres_cpp::Matrix<double> *> matrices;
 
-constexpr int maxReasonableDataSetCount {100};
+static void MatrixNumber (benchmark::internal::Benchmark * b)
+{
+    read<double>(matrices);
+    for (int i = 0; i < static_cast <int> (matrices.size () ); ++i) {
+        b->Arg (i);
+    }
+}
 
 
 
 static void BM_solve (benchmark::State & state)
 {
     state.PauseTiming ();
-    if (state.range_x () < (matrices.size () > 0u ? static_cast<ssize_t>(matrices.size () ) : 0) ) {
-        munkres_cpp::Munkres<double> munkres;
-        while (state.KeepRunning () ) {
-            auto matrix = *matrices [state.range_x ()];
-            state.ResumeTiming ();
-            munkres.solve (matrix);
-            state.PauseTiming ();
-        }
+    munkres_cpp::Munkres<double> munkres;
+    while (state.KeepRunning () ) {
+        auto matrix = *matrices [state.range (0)];
+        state.ResumeTiming ();
+        munkres.solve (matrix);
+        state.PauseTiming ();
     }
 }
-BENCHMARK (BM_solve)->DenseRange (0, maxReasonableDataSetCount);
+BENCHMARK (BM_solve)->Apply (MatrixNumber);
 
 
 
-// Main function.
 int main (int argc, char * argv [])
 {
-    read<double>(matrices);
-
-    benchmark::Initialize ( &argc, argv);
+    benchmark::Initialize (&argc, argv);
     benchmark::RunSpecifiedBenchmarks ();
 }
