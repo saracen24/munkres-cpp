@@ -937,6 +937,35 @@ TYPED_TEST (MunkresTestFloatingResizeable, solve_4x6_NonObviousSolutionCase009_S
 
 
 template<typename TypeParam>
+void solve_3x3_NonObviousSolutionCase010_Success ()
+{
+    // Arrange.
+    using value_type = typename TypeParam::matrix_base::value_type;
+    constexpr value_type infinity = std::numeric_limits<value_type>::infinity ();
+    TypeParam t (3, 3);
+    t(0, 0)=infinity;
+                  t(0, 1)=42;   t(0, 2)=42;
+    t(1, 0)=42;   t(1, 1)=0.0;  t(1, 2)=42;
+    t(2, 0)=42;   t(2, 1)=42;   t(2, 2)=0.0;
+
+    munkres_cpp::Munkres<value_type> munkres;
+
+    // Act.
+    munkres_cpp::replace_infinites (t);
+    munkres.solve (t);
+
+    // Assert.
+    EXPECT_NE (0, t (0, 0) );
+}
+
+TYPED_TEST (MunkresTestFloating, solve_3x3_NonObviousSolutionCase010_Success)
+{
+    solve_3x3_NonObviousSolutionCase010_Success<TypeParam> ();
+}
+
+
+
+template<typename TypeParam>
 void solve_3x3_IsValid_Fail ()
 {
     // Arrange.

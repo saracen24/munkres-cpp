@@ -14,20 +14,10 @@ template<typename T>
 typename std::enable_if<std::is_floating_point<T>::value, void>::type
 replace_infinites (matrix_base<T> & matrix)
 {
-    // Find the greatest value in the matrix that isn't infinity.
-    T max = matrix_base<T>::zero;
-    for (size_t j = 0; j < matrix.columns (); j++) {
-        for (size_t i = 0; i < matrix.rows (); i++) {
-            if (std::isfinite (matrix (i, j) ) && matrix (i, j) > max) {
-                max = std::nextafter (matrix (i, j), std::numeric_limits<T>::max () );
-            }
-        }
-    }
-
     for (size_t j = 0; j < matrix.columns (); j++) {
         for (size_t i = 0; i < matrix.rows (); i++) {
             if (std::isinf (matrix (i, j) ) ) {
-                matrix (i, j) = max;
+                matrix (i, j) = std::numeric_limits<T>::max ();
             }
         }
     }
