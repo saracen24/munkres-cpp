@@ -85,10 +85,10 @@ Matrix<T>::Matrix (const std::initializer_list<std::initializer_list<T>> & init)
         }
     }
 
-    size_t i = 0, j;
+    size_t i = 0;
     for (auto row = init.begin (); row != init.end (); ++row, ++i) {
         assert (row->size () == m_columns);
-        j = 0;
+        size_t j = 0;
         for (auto value = row->begin (); value != row->end (); ++value, ++j) {
             m_matrix[i][j] = *value;
         }
