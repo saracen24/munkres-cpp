@@ -506,18 +506,19 @@ template<typename TypeParam>
 void solve_3x2_NonObviousSolutionCase002_Success ()
 {
     // Arrange.
+    using value_type = typename TypeParam::matrix_base::value_type;
     TypeParam e (3, 2);
     e(0, 0)=1.0;  e(0, 1)=1.0;
     e(1, 0)=0.0;  e(1, 1)=1.0;
     e(2, 0)=1.0;  e(2, 1)=0.0;
 
     TypeParam t (3, 2);
-    t(0, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(0, 0)=static_cast<value_type>(1.0e+17);
                   t(0, 1)=3.0;
-    t(1, 0)=2.0;  t(1, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(1, 0)=2.0;  t(1, 1)=static_cast<value_type>(1.0e+17);
     t(2, 0)=4.0;  t(2, 1)=1.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
+    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
     munkres.solve (t);
@@ -553,17 +554,18 @@ template<typename TypeParam>
 void solve_2x3_NonObviousSolutionCase003_Success ()
 {
     // Arrange.
+    using value_type = typename TypeParam::matrix_base::value_type;
     TypeParam e (2, 3);
     e(0, 0)=1.0;  e(0, 1)=0.0;  e(0, 2)=1.0;
     e(1, 0)=1.0;  e(1, 1)=1.0;  e(1, 2)=0.0;
 
     TypeParam t (2, 3);
-    t(0, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(0, 0)=static_cast<value_type>(1.0e+17);
                   t(0, 1)=2.0;  t(0, 2)=4.0;
-    t(1, 0)=3.0;  t(1, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(1, 0)=3.0;  t(1, 1)=static_cast<value_type>(1.0e+17);
                                 t(1, 2)=1.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
+    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
     munkres.solve (t);
@@ -599,6 +601,7 @@ template<typename TypeParam>
 void solve_4x3_NonObviousSolutionCase004_Success ()
 {
     // Arrange.
+    using value_type = typename TypeParam::matrix_base::value_type;
     TypeParam e (4, 3);
     e(0, 0)=1.0;  e(0, 1)=1.0;  e(0, 2)=1.0;
     e(1, 0)=0.0;  e(1, 1)=1.0;  e(1, 2)=1.0;
@@ -606,17 +609,17 @@ void solve_4x3_NonObviousSolutionCase004_Success ()
     e(3, 0)=1.0;  e(3, 1)=0.0;  e(3, 2)=1.0;
 
     TypeParam t (4, 3);
-    t(0, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                  t(0, 1)=3.0;  t(0, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-    t(1, 0)=2.0;  t(1, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                                t(1, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-    t(2, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                  t(2, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                                t(2, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(0, 0)=static_cast<value_type>(1.0e+17);
+                  t(0, 1)=3.0;  t(0, 2)=static_cast<value_type>(1.0e+17);
+    t(1, 0)=2.0;  t(1, 1)=static_cast<value_type>(1.0e+17);
+                                t(1, 2)=static_cast<value_type>(1.0e+17);
+    t(2, 0)=static_cast<value_type>(1.0e+17);
+                  t(2, 1)=static_cast<value_type>(1.0e+17);
+                                t(2, 2)=static_cast<value_type>(1.0e+17);
     t(3, 0)=4.0;  t(3, 1)=1.0;
-                                t(3, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+                                t(3, 2)=static_cast<value_type>(1.0e+17);
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
+    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
     munkres.solve (t);
@@ -653,24 +656,25 @@ template<typename TypeParam>
 void solve_3x4_NonObviousSolutionCase005_Success ()
 {
     // Arrange.
+    using value_type = typename TypeParam::matrix_base::value_type;
     TypeParam e (3, 4);
     e(0, 0)=1.0;  e(0, 1)=0.0;  e(0, 2)=1.0;  e(0, 3)=1.0;
     e(1, 0)=1.0;  e(1, 1)=1.0;  e(1, 2)=1.0;  e(1, 3)=0.0;
     e(2, 0)=1.0;  e(2, 1)=1.0;  e(2, 2)=0.0;  e(2, 3)=1.0;
 
     TypeParam t (3, 4);
-    t(0, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                  t(0, 1)=2.0;  t(0, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(0, 0)=static_cast<value_type>(1.0e+17);
+                  t(0, 1)=2.0;  t(0, 2)=static_cast<value_type>(1.0e+17);
                                               t(0, 3)=4.0;
-    t(1, 0)=3.0;  t(1, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                                t(1, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(1, 0)=3.0;  t(1, 1)=static_cast<value_type>(1.0e+17);
+                                t(1, 2)=static_cast<value_type>(1.0e+17);
                                               t(1, 3)=1.0;
-    t(2, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                  t(2, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                                t(2, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
-                                              t(2, 3)=static_cast<typename TypeParam::matrix_base::value_type>(1.0e+17);
+    t(2, 0)=static_cast<value_type>(1.0e+17);
+                  t(2, 1)=static_cast<value_type>(1.0e+17);
+                                t(2, 2)=static_cast<value_type>(1.0e+17);
+                                              t(2, 3)=static_cast<value_type>(1.0e+17);
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
+    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
     munkres.solve (t);
@@ -826,6 +830,7 @@ template<typename TypeParam>
 void solve_6x4_NonObviousSolutionCase008_Success ()
 {
     // Arrange.
+    using value_type = typename TypeParam::matrix_base::value_type;
     TypeParam e (6, 4);
     e(0, 0)=1.0;  e(0, 1)=1.0;  e(0, 2)=1.0;  e(0, 3)=1.0;
     e(1, 0)=0.0;  e(1, 1)=1.0;  e(1, 2)=1.0;  e(1, 3)=1.0;
@@ -835,33 +840,33 @@ void solve_6x4_NonObviousSolutionCase008_Success ()
     e(5, 0)=1.0;  e(5, 1)=1.0;  e(5, 2)=0.0;  e(5, 3)=1.0;
 
     TypeParam t (6, 4);
-    t(0, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-                  t(0, 1)=static_cast<typename TypeParam::matrix_base::value_type>(7.33184e+08);
-                                t(0, 2)=static_cast<typename TypeParam::matrix_base::value_type>(9.41561e+08);
-                                              t(0, 3)=static_cast<typename TypeParam::matrix_base::value_type>(2.79247e+08);
-    t(1, 0)=static_cast<typename TypeParam::matrix_base::value_type>(3.06449e+08);
-                  t(1, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-                                t(1, 2)=static_cast<typename TypeParam::matrix_base::value_type>(3.3464e+08);
-                                              t(1, 3)=static_cast<typename TypeParam::matrix_base::value_type>(7.06878e+08);
-    t(2, 0)=static_cast<typename TypeParam::matrix_base::value_type>(9.93296e+08);
-                  t(2, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.9414e+08);
-                                t(2, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-                                              t(2, 3)=static_cast<typename TypeParam::matrix_base::value_type>(1.14174e+08);
-    t(3, 0)=static_cast<typename TypeParam::matrix_base::value_type>(3.51623e+08);
-                  t(3, 1)=static_cast<typename TypeParam::matrix_base::value_type>(2.48635e+08);
-                                t(3, 2)=static_cast<typename TypeParam::matrix_base::value_type>(7.81242e+08);
-                                              t(3, 3)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-    t(4, 0)=static_cast<typename TypeParam::matrix_base::value_type>(7.02639e+08);
-                  t(4, 1)=static_cast<typename TypeParam::matrix_base::value_type>(8.51663e+08);
-                                t(4, 2)=static_cast<typename TypeParam::matrix_base::value_type>(9.37382e+08);
-                                              t(4, 3)=static_cast<typename TypeParam::matrix_base::value_type>(4.96945e+07);
-    t(5, 0)=static_cast<typename TypeParam::matrix_base::value_type>(7.58851e+08);
-                  t(5, 1)=static_cast<typename TypeParam::matrix_base::value_type>(8.58445e+08);
-                                t(5, 2)=static_cast<typename TypeParam::matrix_base::value_type>(8.7235e+07);
-                                              t(5, 3)=static_cast<typename TypeParam::matrix_base::value_type>(5.47076e+08);
+    t(0, 0)=static_cast<value_type>(1.79769e+308);
+                  t(0, 1)=static_cast<value_type>(7.33184e+08);
+                                t(0, 2)=static_cast<value_type>(9.41561e+08);
+                                              t(0, 3)=static_cast<value_type>(2.79247e+08);
+    t(1, 0)=static_cast<value_type>(3.06449e+08);
+                  t(1, 1)=static_cast<value_type>(1.79769e+308);
+                                t(1, 2)=static_cast<value_type>(3.3464e+08);
+                                              t(1, 3)=static_cast<value_type>(7.06878e+08);
+    t(2, 0)=static_cast<value_type>(9.93296e+08);
+                  t(2, 1)=static_cast<value_type>(1.9414e+08);
+                                t(2, 2)=static_cast<value_type>(1.79769e+308);
+                                              t(2, 3)=static_cast<value_type>(1.14174e+08);
+    t(3, 0)=static_cast<value_type>(3.51623e+08);
+                  t(3, 1)=static_cast<value_type>(2.48635e+08);
+                                t(3, 2)=static_cast<value_type>(7.81242e+08);
+                                              t(3, 3)=static_cast<value_type>(1.79769e+308);
+    t(4, 0)=static_cast<value_type>(7.02639e+08);
+                  t(4, 1)=static_cast<value_type>(8.51663e+08);
+                                t(4, 2)=static_cast<value_type>(9.37382e+08);
+                                              t(4, 3)=static_cast<value_type>(4.96945e+07);
+    t(5, 0)=static_cast<value_type>(7.58851e+08);
+                  t(5, 1)=static_cast<value_type>(8.58445e+08);
+                                t(5, 2)=static_cast<value_type>(8.7235e+07);
+                                              t(5, 3)=static_cast<value_type>(5.47076e+08);
 
-    munkres_cpp::replace_infinites<typename TypeParam::matrix_base::value_type> (t);
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
+    munkres_cpp::replace_infinites<value_type> (t);
+    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
     munkres.solve (t);
@@ -881,6 +886,7 @@ template<typename TypeParam>
 void solve_4x6_NonObviousSolutionCase009_Success ()
 {
     // Arrange.
+    using value_type = typename TypeParam::matrix_base::value_type;
     TypeParam e (4, 6);
     e(0, 0)=1.0;  e(0, 1)=0.0;  e(0, 2)=1.0;  e(0, 3)=1.0;  e(0, 4)=1.0;  e(0, 5)=1.0;
     e(1, 0)=1.0;  e(1, 1)=1.0;  e(1, 2)=0.0;  e(1, 3)=1.0;  e(1, 4)=1.0;  e(1, 5)=1.0;
@@ -888,33 +894,33 @@ void solve_4x6_NonObviousSolutionCase009_Success ()
     e(3, 0)=1.0;  e(3, 1)=1.0;  e(3, 2)=1.0;  e(3, 3)=1.0;  e(3, 4)=0.0;  e(3, 5)=1.0;
 
     TypeParam t (4, 6);
-    t(0, 0)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-                  t(0, 1)=static_cast<typename TypeParam::matrix_base::value_type>(3.06449e+08);
-                                t(0, 2)=static_cast<typename TypeParam::matrix_base::value_type>(9.93296e+08);
-                                              t(0, 3)=static_cast<typename TypeParam::matrix_base::value_type>(3.51623e+08);
-                                                            t(0, 4)=static_cast<typename TypeParam::matrix_base::value_type>(7.02639e+08);
-                                                                          t(0, 5)=static_cast<typename TypeParam::matrix_base::value_type>(7.58851e+08);
-    t(1, 0)=static_cast<typename TypeParam::matrix_base::value_type>(7.33184e+08);
-                  t(1, 1)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-                                t(1, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.9414e+08);
-                                              t(1, 3)=static_cast<typename TypeParam::matrix_base::value_type>(2.48635e+08);
-                                                            t(1, 4)=static_cast<typename TypeParam::matrix_base::value_type>(8.51663e+08);
-                                                                          t(1, 5)=static_cast<typename TypeParam::matrix_base::value_type>(8.58445e+08);
-    t(2, 0)=static_cast<typename TypeParam::matrix_base::value_type>(9.41561e+08);
-                  t(2, 1)=static_cast<typename TypeParam::matrix_base::value_type>(3.3464e+08);
-                                t(2, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-                                              t(2, 3)=static_cast<typename TypeParam::matrix_base::value_type>(7.81242e+08);
-                                                            t(2, 4)=static_cast<typename TypeParam::matrix_base::value_type>(9.37382e+08);
-                                                                          t(2, 5)=static_cast<typename TypeParam::matrix_base::value_type>(8.7235e+07);
-    t(3, 0)=static_cast<typename TypeParam::matrix_base::value_type>(2.79247e+08);
-                  t(3, 1)=static_cast<typename TypeParam::matrix_base::value_type>(7.06878e+08);
-                                t(3, 2)=static_cast<typename TypeParam::matrix_base::value_type>(1.14174e+08);
-                                              t(3, 3)=static_cast<typename TypeParam::matrix_base::value_type>(1.79769e+308);
-                                                            t(3, 4)=static_cast<typename TypeParam::matrix_base::value_type>(4.96945e+07);
-                                                                          t(3, 5)=static_cast<typename TypeParam::matrix_base::value_type>(5.47076e+08);
+    t(0, 0)=static_cast<value_type>(1.79769e+308);
+                  t(0, 1)=static_cast<value_type>(3.06449e+08);
+                                t(0, 2)=static_cast<value_type>(9.93296e+08);
+                                              t(0, 3)=static_cast<value_type>(3.51623e+08);
+                                                            t(0, 4)=static_cast<value_type>(7.02639e+08);
+                                                                          t(0, 5)=static_cast<value_type>(7.58851e+08);
+    t(1, 0)=static_cast<value_type>(7.33184e+08);
+                  t(1, 1)=static_cast<value_type>(1.79769e+308);
+                                t(1, 2)=static_cast<value_type>(1.9414e+08);
+                                              t(1, 3)=static_cast<value_type>(2.48635e+08);
+                                                            t(1, 4)=static_cast<value_type>(8.51663e+08);
+                                                                          t(1, 5)=static_cast<value_type>(8.58445e+08);
+    t(2, 0)=static_cast<value_type>(9.41561e+08);
+                  t(2, 1)=static_cast<value_type>(3.3464e+08);
+                                t(2, 2)=static_cast<value_type>(1.79769e+308);
+                                              t(2, 3)=static_cast<value_type>(7.81242e+08);
+                                                            t(2, 4)=static_cast<value_type>(9.37382e+08);
+                                                                          t(2, 5)=static_cast<value_type>(8.7235e+07);
+    t(3, 0)=static_cast<value_type>(2.79247e+08);
+                  t(3, 1)=static_cast<value_type>(7.06878e+08);
+                                t(3, 2)=static_cast<value_type>(1.14174e+08);
+                                              t(3, 3)=static_cast<value_type>(1.79769e+308);
+                                                            t(3, 4)=static_cast<value_type>(4.96945e+07);
+                                                                          t(3, 5)=static_cast<value_type>(5.47076e+08);
 
-    munkres_cpp::replace_infinites<typename TypeParam::matrix_base::value_type> (t);
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
+    munkres_cpp::replace_infinites<value_type> (t);
+    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
     munkres.solve (t);

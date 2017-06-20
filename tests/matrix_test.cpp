@@ -667,7 +667,3 @@ TEST_F (MatrixTest, operatorSubscript_Success)
     EXPECT_FLOAT_EQ ( 2.1, test_matrix (2, 1) );
     EXPECT_FLOAT_EQ ( 2.2, test_matrix (2, 2) );
 }
-
-
-
-
