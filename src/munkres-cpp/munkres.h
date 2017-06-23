@@ -338,10 +338,9 @@ void Munkres<T>::solve (matrix_base<T> & matrix)
 
 
     if (rows != columns) {
-        // If the input matrix isn't square, make it square
-        // and fill the empty values with the largest value present
-        // in the matrix.
-        matrix.resize ( size, size, matrix.max () );
+        // If the input matrix isn't square, make it square and fill
+        // the empty values with the maximum possible value.
+        matrix.resize (size, size, matrix_base<T>::max_val);
     }
 
 
