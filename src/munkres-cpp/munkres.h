@@ -136,7 +136,7 @@ int Munkres<T>::step1 (matrix_base<T> & matrix)
 
 
 template<typename T>
-int Munkres<T>::step2 (matrix_base<T> & matrix)
+int Munkres<T>::step2 (matrix_base<T> &)
 {
     size_t covercount = 0;
 
@@ -147,7 +147,7 @@ int Munkres<T>::step2 (matrix_base<T> & matrix)
                 covercount++;
             }
 
-    if (covercount >= matrix.minsize () ) {
+    if (covercount >= size) {
         return 0;
     }
 

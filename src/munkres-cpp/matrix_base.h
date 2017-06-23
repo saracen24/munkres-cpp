@@ -56,11 +56,6 @@ class matrix_base
         }
 
         // Implementation.
-        size_t minsize () const
-        {
-            return rows () < columns () ? rows () : columns ();
-        }
-
         template <typename X = value_type>
         constexpr typename std::enable_if<std::is_integral<X>::value, bool>::type
         is_equal (const size_t row, const size_t column, const X & value) const
