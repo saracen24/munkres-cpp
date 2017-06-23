@@ -15,7 +15,7 @@ test_job:
         - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON ${BUILD_DIR}/..
     script:
         - make tests
-        - cd ${BUILD_DIR}/tests && ./munkrestest > /dev/null
+        - cd ${BUILD_DIR}/tests && ./munkrestest
         - cd ${BUILD_DIR}
         - gcovr --exclude 'tests' --exclude 'build' -r ..
     only:

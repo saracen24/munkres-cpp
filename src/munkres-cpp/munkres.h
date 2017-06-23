@@ -23,7 +23,6 @@
 
 #include <list>
 #include <utility>
-#include <iostream>
 #include <cmath>
 #include <limits>
 
@@ -156,23 +155,8 @@ int Munkres<T>::step2 (matrix_base<T> & matrix)
             }
 
     if (covercount >= matrix.minsize () ) {
-        #ifdef DEBUG
-        std::cout << "Final cover count: " << covercount << std::endl;
-        #endif
         return 0;
     }
-
-    #ifdef DEBUG
-    std::cout << "Munkres matrix has " << covercount << " of " << matrix.minsize () << " Columns covered:" << std::endl;
-    for (size_t col = 0; col < columns; col++) {
-        for (size_t row = 0; row < rows; row++) {
-            std::cout.width (8);
-            std::cout << matrix (row, col) << ",";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-    #endif
 
 
     return 3;
