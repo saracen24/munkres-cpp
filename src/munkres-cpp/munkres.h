@@ -166,19 +166,17 @@ int Munkres<T>::step3 (matrix_base<T> & matrix)
     // 3. If a Z* exists, cover this row and uncover the column of the Z*. Return to Step 3.1 to find a new Z
     if (find_uncovered_in_matrix (matrix, 0, saverow, savecol) ) {
         mask_matrix (saverow, savecol) = PRIME;  // Prime it.
-    } else {
-        return 5;
-    }
-
-    for (size_t ncol = 0; ncol < size; ncol++) {
-        if (mask_matrix (saverow,ncol) == STAR) {
-            row_mask[saverow] = true;   // Cover this row and
-            col_mask[ncol] = false;     // uncover the column containing the starred zero
-            return 3;                   // repeat.
+        for (size_t ncol = 0; ncol < size; ncol++) {
+            if (mask_matrix (saverow, ncol) == STAR) {
+                row_mask[saverow] = true;   // Cover this row and
+                col_mask[ncol] = false;     // uncover the column containing the starred zero
+                return 3;                   // repeat.
+            }
         }
+        return 4;   // No starred zero in the row containing this primed zero.
     }
 
-    return 4;   // No starred zero in the row containing this primed zero.
+    return 5;
 }
 
 
