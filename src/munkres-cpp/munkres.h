@@ -366,13 +366,9 @@ void Munkres<T>::solve (matrix_base<T> & matrix)
 
     row_mask = new bool[size];
     col_mask = new bool[size];
-    for (size_t i = 0; i < size; i++) {
-        row_mask[i] = false;
-    }
+    std::fill_n (row_mask, rows, false);
+    std::fill_n (col_mask, rows, false);
 
-    for (size_t i = 0; i < size; i++) {
-        col_mask[i] = false;
-    }
 
     // Prepare the matrix values...
     minimize_along_direction (matrix, rows >= columns);
