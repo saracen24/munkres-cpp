@@ -20,10 +20,8 @@
 #define _MATRIX_H_
 
 #include "munkres-cpp/matrix_base.h"
-#include "munkres-cpp/utils.h"
 #include <initializer_list>
-#include <cstdlib>
-#include <algorithm>
+#include <cassert>
 
 
 
@@ -154,9 +152,6 @@ Matrix<T>::~Matrix ()
 template<class T>
 void Matrix<T>::resize (const size_t rows, const size_t columns, const T default_value)
 {
-    assert (rows > 0);
-    assert (columns > 0);
-
     // Save array pointer.
     T ** new_matrix;
     // Alloc new arrays.
@@ -192,4 +187,3 @@ void Matrix<T>::resize (const size_t rows, const size_t columns, const T default
 }// namespace munkres_cpp
 
 #endif /* !defined(_MATRIX_H_) */
-
