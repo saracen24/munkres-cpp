@@ -132,12 +132,7 @@ int Munkres<T>::step2 (matrix_base<T> &)
                 covercount++;
             }
 
-    if (covercount >= size) {
-        return 0;
-    }
-
-
-    return 3;
+    return covercount >= size ? 0 : 3;
 }
 
 
@@ -260,33 +255,22 @@ int Munkres<T>::step5 (matrix_base<T> & matrix)
     // 3. Subtract h from all uncovered columns
     // 4. Return to Step 3, without altering stars, primes, or covers.
     T h = std::numeric_limits<T>::max ();
-    for (size_t col = 0; col < size; col++) {
-        if (!col_mask[col]) {
-            for (size_t row = 0; row < size; row++) {
-                if (!row_mask[row]) {
-                    if (h > matrix (row, col) && !matrix.is_zero (row, col) ) {
+    for (size_t col = 0; col < size; col++)
+        if (!col_mask[col])
+            for (size_t row = 0; row < size; row++)
+                if (!row_mask[row])
+                    if (h > matrix (row, col) && !matrix.is_zero (row, col) )
                         h = matrix (row, col);
-                    }
-                }
-            }
-        }
-    }
 
-    for (size_t row = 0; row < size; row++) {
-        if (row_mask[row]) {
-            for (size_t col = 0; col < size; col++) {
+    for (size_t row = 0; row < size; row++)
+        if (row_mask[row])
+            for (size_t col = 0; col < size; col++)
                 matrix (row, col) += h;
-            }
-        }
-    }
 
-    for (size_t col = 0; col < size; col++) {
-        if (!col_mask[col]) {
-            for (size_t row = 0; row < size; row++) {
+    for (size_t col = 0; col < size; col++)
+        if (!col_mask[col])
+            for (size_t row = 0; row < size; row++)
                 matrix (row, col) -= h;
-            }
-        }
-    }
 
     return 3;
 }
@@ -332,38 +316,29 @@ void Munkres<T>::solve (matrix_base<T> & matrix)
     while (step) {
         switch (step) {
         case 1:
-            step = step1 (matrix);
-            // step is always 2
-            break;
+            step = step1 (matrix);    // step is always 2
         case 2:
-            step = step2 (matrix);
-            // step is always either 0 or 3
+            step = step2 (matrix);    // step is always either 0 or 3
             break;
         case 3:
-            step = step3 (matrix);
-            // step in [3, 4, 5]
+            step = step3 (matrix);    // step in [3, 4, 5]
             break;
         case 4:
-            step = step4 (matrix);
-            // step is always 2
+            step = step4 (matrix);    // step is always 2
             break;
         case 5:
-            step = step5 (matrix);
-            // step is always 3
+            step = step5 (matrix);    // step is always 3
             break;
         }
     }
 
     // Store results.
-    for (size_t col = 0; col < size; col++) {
-        for (size_t row = 0; row < size; row++) {
+    for (size_t col = 0; col < size; col++)
+        for (size_t row = 0; row < size; row++)
             matrix (row, col) = mask_matrix (row, col) == STAR ? 0 : 1;
-        }
-    }
 
 
-    // Remove the excess rows or columns that we added to fit the
-    // input to a square matrix.
+    // Remove the excess rows or columns that we added to fit the input to a square matrix.
     matrix.resize (rows, columns);
 
     delete [] row_mask;
