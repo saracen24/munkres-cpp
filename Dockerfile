@@ -6,6 +6,7 @@ RUN         sed 's/main/main contrib non-free/g' /etc/apt/sources.list \
          && apt-get install -y -qq \
                 cmake \
                 curl \
+                cppcheck \
                 g++ \
                 gcovr \
                 git \
