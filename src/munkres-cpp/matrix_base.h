@@ -56,24 +56,13 @@ class matrix_base
         }
 
         // Implementation.
-        template <typename X = value_type>
-        constexpr typename std::enable_if<std::is_integral<X>::value, bool>::type
-        is_equal (const size_t row, const size_t column, const X & value) const
-        {
-            return operator () (row, column) == value;
-        }
+        template <typename V = value_type>
+        constexpr typename std::enable_if<std::is_integral<V>::value, bool>::type
+        is_zero (size_t row, size_t column) const {return operator () (row, column) == 0;}
 
-        template <typename X = value_type>
-        constexpr typename std::enable_if<!std::is_integral<X>::value, bool>::type
-        is_equal (const size_t row, const size_t column, const X & value) const
-        {
-            return FP_ZERO == std::fpclassify (operator () (row, column) - value);
-        }
-
-        bool is_zero (const size_t row, const size_t column) const
-        {
-            return is_equal (row, column, zero);
-        }
+        template <typename V = value_type>
+        constexpr typename std::enable_if<!std::is_integral<V>::value, bool>::type
+        is_zero (size_t row, size_t column) const {return FP_ZERO == std::fpclassify (operator () (row, column) );}
 };
 
 template<typename T>

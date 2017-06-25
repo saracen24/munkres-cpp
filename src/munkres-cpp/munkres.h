@@ -41,7 +41,7 @@ class Munkres
         static constexpr char NORMAL = 0;
         static constexpr char STAR   = 1;
         static constexpr char PRIME  = 2;
-        inline bool find_uncovered_in_matrix (matrix_base<T> &, const T, size_t &, size_t &) const;
+        inline bool find_uncovered_in_matrix (matrix_base<T> &, size_t &, size_t &) const;
         int step1 (matrix_base<T> &);
         int step2 (matrix_base<T> &);
         int step3 (matrix_base<T> &);
@@ -83,19 +83,14 @@ void minimize_along_direction (matrix_base<T> & matrix, bool over_columns)
 
 
 template<typename T>
-bool Munkres<T>::find_uncovered_in_matrix (matrix_base<T> & matrix, const T item, size_t & row, size_t & col) const
+bool Munkres<T>::find_uncovered_in_matrix (matrix_base<T> & matrix, size_t & row, size_t & col) const
 {
-    for (col = 0; col < size; col++) {
-        if (!col_mask[col]) {
-            for (row = 0; row < size; row++) {
-                if (!row_mask[row]) {
-                    if (matrix.is_equal (row, col, item) ) {
+    for (col = 0; col < size; col++)
+        if (!col_mask[col])
+            for (row = 0; row < size; row++)
+                if (!row_mask[row])
+                    if (matrix.is_zero (row, col) )
                         return true;
-                    }
-                }
-            }
-        }
-    }
 
     return false;
 }
@@ -154,7 +149,7 @@ int Munkres<T>::step3 (matrix_base<T> & matrix)
     // 1. Find an uncovered Z in the distance matrix and prime it. If no such zero exists, go to Step 5
     // 2. If No Z* exists in the row of the Z', go to Step 4.
     // 3. If a Z* exists, cover this row and uncover the column of the Z*. Return to Step 3.1 to find a new Z
-    if (find_uncovered_in_matrix (matrix, 0, saverow, savecol) ) {
+    if (find_uncovered_in_matrix (matrix, saverow, savecol) ) {
         mask_matrix (saverow, savecol) = PRIME;  // Prime it.
         for (size_t ncol = 0; ncol < size; ncol++) {
             if (mask_matrix (saverow, ncol) == STAR) {
