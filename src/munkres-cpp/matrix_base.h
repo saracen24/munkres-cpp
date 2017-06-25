@@ -19,10 +19,10 @@
 #if !defined(__MUNKRES_CPP_MATRIX_BASE_H__)
 #define __MUNKRES_CPP_MATRIX_BASE_H__
 
-#include <cstdlib>
 #include <limits>
 #include <cmath>
 #include <stdexcept>
+#include <iterator>
 
 
 
@@ -50,9 +50,8 @@ class matrix_base
         // Default implementation.
         virtual void resize (const size_t rows, const size_t columns, const value_type = zero)
         {
-            if (rows != this->rows () || columns != this->columns () ) {
+            if (rows != this->rows () || columns != this->columns () )
                 throw std::logic_error ("Called function with inappropriate default implementation.");
-            }
         }
 
         // Implementation.
@@ -63,6 +62,27 @@ class matrix_base
         template <typename V = value_type>
         constexpr typename std::enable_if<!std::is_integral<V>::value, bool>::type
         is_zero (size_t row, size_t column) const {return FP_ZERO == std::fpclassify (operator () (row, column) );}
+
+        // Implementation of the std::iterator with begin and end functions allow to use STL algorithms.
+        template <typename M = matrix_base<value_type> >
+        struct iterator : public std::iterator<std::input_iterator_tag, typename M::value_type>
+        {
+            iterator (M & m, const size_t r, const size_t c) : m {m}, r {r}, c {c} {}
+            bool operator == (const iterator & that) {return this->r == that.r && this->c == that.c;}
+            bool operator != (const iterator & that) {return ! operator == (that);}
+            typename M::value_type & operator * () const {return m (r, c);}
+            iterator & operator ++ ()
+            {
+                r += ++c / m.columns ();
+                c  =   c % m.columns ();
+                return * this;
+            }
+
+            M & m;
+            size_t r, c;
+        };
+        iterator<> begin () {return iterator<> {* this, 0, 0};}
+        iterator<> end   () {return iterator<> {* this, rows (), 0};}
 };
 
 template<typename T>
