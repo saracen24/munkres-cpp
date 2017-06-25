@@ -19,7 +19,8 @@
 
 
 // Easy way to start with munkres-cpp.
-#include "munkres-cpp/munkres.h"
+#include <munkres-cpp/munkres.h>
+#include <munkres-cpp/utils.h>
 #include <cstdlib>
 
 int main (int /*argc*/, char * /*argv*/[])

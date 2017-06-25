@@ -19,11 +19,11 @@
 
 
 // Easy way to start with munkres-cpp.
-#include "munkres-cpp/munkres.h"
+#include <munkres-cpp/munkres.h>
 // The library provides set of adapters for the most popular containers
 // (for more info explore "adapters" folder).
 // If you are lucky then adapter for your container is already implemented.
-#include "munkres-cpp/adapters/matrix_boost.h"
+#include <munkres-cpp/adapters/matrix_boost.h>
 #include <cstdlib>
 
 int main (int /*argc*/, char * /*argv*/[])

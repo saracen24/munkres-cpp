@@ -25,6 +25,7 @@
 // from base matrix class and implement the basic functions which allows navigate
 // on container and access to its data.
 #include <munkres-cpp/matrix_base.h>
+#include <munkres-cpp/utils.h>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <cstdlib>
 
