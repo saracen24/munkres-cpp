@@ -60,33 +60,23 @@ class Munkres
 
 
 template<typename T>
-void minimize_along_direction (matrix_base<T> & matrix, const bool over_columns)
+void minimize_along_direction (matrix_base<T> & matrix, bool over_columns)
 {
-    const size_t outer_size = over_columns ? matrix.columns () : matrix.rows (),
-                 inner_size = over_columns ? matrix.rows () : matrix.columns ();
-
     // Look for a minimum value to subtract from all values along the "outer" direction.
-    for (size_t i = 0; i < outer_size; i++) {
-        T min = over_columns ? matrix (0, i) : matrix (i, 0);
+    size_t i, j = 0, size = matrix.rows ();
+    size_t & r = over_columns ? j : i;
+    size_t & c = over_columns ? i : j;
+    for (i = 0; i < size; i++, j = 0) {
+        T min = matrix (r, c);
 
-        // As long as the current minimum is greater than zero,
-        // keep looking for the minimum.
+        // As long as the current minimum is greater than zero, keep looking for the minimum.
         // Start at one because we already have the 0th value in min.
-        for (size_t j = 1; j < inner_size && min > 0; j++) {
-            min = std::min<T>(
-                min,
-                over_columns ? matrix (j, i) : matrix (i, j) );
-        }
+        for (j = 1; j < size && min > 0; j++)
+            min = std::min (min, matrix (r, c) );
 
-        if (min > 0) {
-            for (size_t j = 0; j < inner_size; j++) {
-                if (over_columns) {
-                    matrix (j, i) -= min;
-                } else {
-                    matrix (i, j) -= min;
-                }
-            }
-        }
+        if (min > 0)
+            for (j = 0; j < size; j++)
+                matrix (r, c) -= min;
     }
 }
 
