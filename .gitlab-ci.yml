@@ -17,6 +17,7 @@ test_job:
         - make tests
         - cd ${BUILD_DIR}/tests && ./munkrestest
         - cd ${BUILD_DIR}
+        - make coverage
         - gcovr --exclude 'tests' --exclude 'build' -r ..
     only:
         - devel
@@ -34,6 +35,8 @@ full_job:
     script:
         - make examples
         - make benchmarks
+        - make cppcheck
+        - cat cppcheck.report
     only:
         - devel
 
