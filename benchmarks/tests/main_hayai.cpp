@@ -20,7 +20,6 @@ class MunkresFixture : public ::hayai::Fixture
             matrix = *matrices [i];
         }
 
-        munkres_cpp::Munkres<double> munkres;
         munkres_cpp::Matrix<double> matrix;
 };
 
@@ -28,7 +27,7 @@ class MunkresFixture : public ::hayai::Fixture
 
 BENCHMARK_F (MunkresFixture, Solve, 5000, 1)
 {
-    munkres.solve (matrix);
+    munkres_cpp::Munkres<double> munkres (matrix);
 }
 
 

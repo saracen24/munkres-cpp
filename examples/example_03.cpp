@@ -37,9 +37,8 @@ int main (int /*argc*/, char * /*argv*/[])
     data (1, 0) = 5.0; data (1, 1) = 9.0;
     // Don't forget! you are responsible for correctness of the input data.
 
-    // Create the solver and apply the algorithm to data.
-    munkres_cpp::Munkres<double> solver;
-    solver.solve (data);
+    // Create the solver and pass data to it.
+    munkres_cpp::Munkres<double> solver (data);
 
     // Now the matrix contains result.
 

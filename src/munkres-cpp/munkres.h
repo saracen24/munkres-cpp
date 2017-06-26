@@ -36,26 +36,32 @@ template<typename T>
 class Munkres
 {
     public:
-        void solve (matrix_base<T> & m);
+        Munkres (matrix_base<T> &);
 
     private:
-        static constexpr char NORMAL = 0;
-        static constexpr char STAR   = 1;
-        static constexpr char PRIME  = 2;
-        inline bool find_uncovered_in_matrix (matrix_base<T> &, size_t &, size_t &) const;
-        int step1 (matrix_base<T> &);
-        int step2 (matrix_base<T> &);
-        int step3 (matrix_base<T> &);
-        int step4 (matrix_base<T> &);
-        int step5 (matrix_base<T> &);
-        int step6 (matrix_base<T> &);
+        Munkres (const Munkres &) = delete;
+        Munkres & operator = (const Munkres &) = delete;
+        bool find_uncovered_in_matrix (size_t &, size_t &) const;
+        int step1 ();
+        int step2 ();
+        int step3 ();
+        int step4 ();
+        int step5 ();
+        int step6 ();
 
-        Matrix<char> mask_matrix {};
-        bool * row_mask = nullptr;
-        bool * col_mask = nullptr;
-        size_t saverow  = 0;
-        size_t savecol  = 0;
-        size_t size     = 0;
+        const size_t size;
+        matrix_base<T> & matrix;
+        Matrix<char> mask_matrix;
+        bool * const row_mask;
+        bool * const col_mask;
+        size_t saverow;
+        size_t savecol;
+        enum MASK : char
+        {
+            NORMAL
+          , STAR    // STAR  == 1 == starred,
+          , PRIME   // PRIME == 2 == primed.
+        };
 };
 
 
@@ -84,7 +90,7 @@ void minimize_along_direction (matrix_base<T> & matrix, bool over_columns)
 
 
 template<typename T>
-bool Munkres<T>::find_uncovered_in_matrix (matrix_base<T> & matrix, size_t & row, size_t & col) const
+bool Munkres<T>::find_uncovered_in_matrix (size_t & row, size_t & col) const
 {
     for (col = 0; col < size; col++)
         if (!col_mask[col])
@@ -99,7 +105,7 @@ bool Munkres<T>::find_uncovered_in_matrix (matrix_base<T> & matrix, size_t & row
 
 
 template<typename T>
-int Munkres<T>::step1 (matrix_base<T> & matrix)
+int Munkres<T>::step1 ()
 {
     for (size_t row = 0; row < size; row++) {
         for (size_t col = 0; col < size; col++) {
@@ -122,7 +128,7 @@ int Munkres<T>::step1 (matrix_base<T> & matrix)
 
 
 template<typename T>
-int Munkres<T>::step2 (matrix_base<T> &)
+int Munkres<T>::step2 ()
 {
     size_t covercount = 0;
 
@@ -139,13 +145,13 @@ int Munkres<T>::step2 (matrix_base<T> &)
 
 
 template<typename T>
-int Munkres<T>::step3 (matrix_base<T> & matrix)
+int Munkres<T>::step3 ()
 {
     // Main Zero Search
     // 1. Find an uncovered Z in the distance matrix and prime it. If no such zero exists, go to Step 5
     // 2. If No Z* exists in the row of the Z', go to Step 4.
     // 3. If a Z* exists, cover this row and uncover the column of the Z*. Return to Step 3.1 to find a new Z
-    if (find_uncovered_in_matrix (matrix, saverow, savecol) ) {
+    if (find_uncovered_in_matrix (saverow, savecol) ) {
         mask_matrix (saverow, savecol) = PRIME;  // Prime it.
         for (size_t ncol = 0; ncol < size; ncol++) {
             if (mask_matrix (saverow, ncol) == STAR) {
@@ -163,7 +169,7 @@ int Munkres<T>::step3 (matrix_base<T> & matrix)
 
 
 template<typename T>
-int Munkres<T>::step4 (matrix_base<T> &)
+int Munkres<T>::step4 ()
 {
     // Seq contains pairs of row/column values where we have found
     // either a star or a prime that is part of the ``alternating sequence``.
@@ -248,7 +254,7 @@ int Munkres<T>::step4 (matrix_base<T> &)
 
 
 template<typename T>
-int Munkres<T>::step5 (matrix_base<T> & matrix)
+int Munkres<T>::step5 ()
 {
     // New Zero Manufactures
     // 1. Let h be the smallest uncovered entry in the (modified) distance matrix.
@@ -285,27 +291,25 @@ int Munkres<T>::step5 (matrix_base<T> & matrix)
 // Assignments are remaining 0 values
 // (extra 0 values are replaced with 1)
 template<typename T>
-void Munkres<T>::solve (matrix_base<T> & matrix)
+Munkres<T>::Munkres (matrix_base<T> & matrix)
+    : size {std::max (matrix.rows (), matrix.columns () )}
+    , matrix {matrix}
+    , mask_matrix {size, size}
+    , row_mask {new bool[size]}
+    , col_mask {new bool[size]}
+    , saverow {0}
+    , savecol {0}
 {
-    const size_t rows = matrix.rows (),
-                 columns = matrix.columns ();
-    size = std::max (rows, columns);
+    const size_t rows = matrix.rows ();
+    const size_t columns = matrix.columns ();
 
+    std::fill_n (row_mask, size, false);
+    std::fill_n (col_mask, size, false);
 
-    if (rows != columns) {
+    if (rows != columns)
         // If the input matrix isn't square, make it square and fill
         // the empty values with the maximum possible value.
         matrix.resize (size, size, std::numeric_limits<T>::max () );
-    }
-
-
-    // STAR == 1 == starred, PRIME == 2 == primed.
-    mask_matrix.resize (size, size);
-
-    row_mask = new bool[size];
-    col_mask = new bool[size];
-    std::fill_n (row_mask, rows, false);
-    std::fill_n (col_mask, rows, false);
 
 
     // Prepare the matrix values...
@@ -317,18 +321,18 @@ void Munkres<T>::solve (matrix_base<T> & matrix)
     while (step) {
         switch (step) {
         case 1:
-            step = step1 (matrix);    // step is always 2
+            step = step1 ();    // step is always 2
         case 2:
-            step = step2 (matrix);    // step is always either 0 or 3
+            step = step2 ();    // step is always either 0 or 3
             break;
         case 3:
-            step = step3 (matrix);    // step in [3, 4, 5]
+            step = step3 ();    // step in [3, 4, 5]
             break;
         case 4:
-            step = step4 (matrix);    // step is always 2
+            step = step4 ();    // step is always 2
             break;
         case 5:
-            step = step5 (matrix);    // step is always 3
+            step = step5 ();    // step is always 3
             break;
         }
     }

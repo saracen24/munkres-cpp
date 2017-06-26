@@ -21,11 +21,10 @@ static void MatrixNumber (benchmark::internal::Benchmark * b)
 static void BM_solve (benchmark::State & state)
 {
     state.PauseTiming ();
-    munkres_cpp::Munkres<double> munkres;
     while (state.KeepRunning () ) {
         auto matrix = *matrices [state.range (0)];
         state.ResumeTiming ();
-        munkres.solve (matrix);
+        munkres_cpp::Munkres<double> munkres (matrix);
         state.PauseTiming ();
     }
 }

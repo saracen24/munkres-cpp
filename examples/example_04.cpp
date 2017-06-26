@@ -78,9 +78,8 @@ int main (int /*argc*/, char * /*argv*/[])
     // Create data adapter and pass your container to it.
     matrix_boost_adapter<double> adapter (data);
 
-    // Create the solver and apply the algorithm to data.
-    munkres_cpp::Munkres<double> solver;
-    solver.solve (adapter);
+    // Create the solver and pass data to it.
+    munkres_cpp::Munkres<double> solver (adapter);
 
     // Now the matrix contains result.
 

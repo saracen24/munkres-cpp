@@ -1,4 +1,5 @@
 #include "munkres-cpp/munkres.h"
+#include "munkres-cpp/utils.h"
 #include <cstdlib>
 
 
@@ -10,10 +11,9 @@ int main ()
             {1.0, 2.0}
           , {3.0, 1.0}
         };
-        munkres_cpp::Munkres<double> solver;
         munkres_cpp::replace_infinites (data);
         if (munkres_cpp::is_data_valid (data) ) {
-            solver.solve (data);
+            munkres_cpp::Munkres<double> solver (data);
         }
     }
 
@@ -22,9 +22,8 @@ int main ()
             {1,   2}
           , {3,   1}
         };
-        munkres_cpp::Munkres<int> solver;
         if (munkres_cpp::is_data_valid (data) ) {
-            solver.solve (data);
+            munkres_cpp::Munkres<int> solver (data);
         }
     }
 

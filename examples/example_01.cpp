@@ -34,10 +34,8 @@ int main (int /*argc*/, char * /*argv*/[])
     // You are totally responsible for correctness of the input data.
     // Input data must be positive and well defined (no NaN or infinity).
 
-    // Next you need create the problem solver.
-    munkres_cpp::Munkres<int> solver;
-    // And apply Munkres algorithm to data.
-    solver.solve (data);
+    // Next you need create the problem solver and pass data to it.
+    munkres_cpp::Munkres<int> solver (data);
 
     // Now the matrix contains result.
     // Zero value represents selected values.

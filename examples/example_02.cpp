@@ -37,10 +37,8 @@ int main (int /*argc*/, char * /*argv*/[])
     // The library provide generic function for checking is input data
     // correct and ready for processing.
     if (munkres_cpp::is_data_valid (data) ) {
-        // Next you need create the problem solver.
-        munkres_cpp::Munkres<int> solver;
-        // And apply Munkres algorithm to data.
-        solver.solve (data);
+        // Next you need create the problem solver and pass data to it.
+        munkres_cpp::Munkres<int> solver (data);
 
         // Now the matrix contains result.
         // Zero value represents selected values.

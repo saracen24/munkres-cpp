@@ -182,10 +182,9 @@ void solve_IsSingleSolution_Success ()
 {
     // Arrange.
     TypeParam matrix = generateRandomMatrix<TypeParam> (N, N);
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
 
     // Act.
-    munkres.solve (matrix);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (matrix);
 
     // Assert.
     isSingleSolution (matrix);
@@ -252,10 +251,9 @@ void solve_IsValidOutput_Success ()
 {
     // Arrange.
     TypeParam matrix = generateRandomMatrix<TypeParam> (N, N);
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
 
     // Act.
-    munkres.solve (matrix);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (matrix);
 
     // Assert.
     isValidOutput (matrix);
@@ -303,10 +301,8 @@ void solve_1x1_ObviousSolution_Success ()
     TypeParam t (1, 1);
     t(0, 0)=0.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -356,10 +352,8 @@ void solve_2x2_ObviousSolution_Success ()
     t(0, 0)=1.0;  t(0, 1)=0.0;
     t(1, 0)=0.0;  t(1, 1)=1.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -411,10 +405,8 @@ void solve_3x3_ObviousSolution_Success ()
     t(1, 0)=0.0;  t(1, 1)=1.0;  t(1, 2)=1.0;
     t(2, 0)=1.0;  t(2, 1)=1.0;  t(2, 2)=0.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -471,10 +463,8 @@ void solve_3x2_NonObviousSolution_Success ()
     t(1, 0)=0.0;  t(1, 1)=9.0;
     t(2, 0)=9.0;  t(2, 1)=9.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -519,10 +509,8 @@ void solve_3x2_NonObviousSolutionCase002_Success ()
     t(1, 0)=2.0;  t(1, 1)=static_cast<value_type>(1.0e+17);
     t(2, 0)=4.0;  t(2, 1)=1.0;
 
-    munkres_cpp::Munkres<value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -566,10 +554,8 @@ void solve_2x3_NonObviousSolutionCase003_Success ()
     t(1, 0)=3.0;  t(1, 1)=static_cast<value_type>(1.0e+17);
                                 t(1, 2)=1.0;
 
-    munkres_cpp::Munkres<value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -620,10 +606,8 @@ void solve_4x3_NonObviousSolutionCase004_Success ()
     t(3, 0)=4.0;  t(3, 1)=1.0;
                                 t(3, 2)=static_cast<value_type>(1.0e+17);
 
-    munkres_cpp::Munkres<value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<value_type> munkres (t);
 
     // Assert.
     EXPECT_EQ (e (1, 0), t (1, 0) );
@@ -675,10 +659,8 @@ void solve_3x4_NonObviousSolutionCase005_Success ()
                                 t(2, 2)=static_cast<value_type>(1.0e+17);
                                               t(2, 3)=static_cast<value_type>(1.0e+17);
 
-    munkres_cpp::Munkres<value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<value_type> munkres (t);
 
     // Assert.
     EXPECT_EQ (e (0, 1), t (0, 1) );
@@ -721,10 +703,8 @@ void solve_3x3_NonObviousSolutionCase006_Success ()
     t(1, 0)=0.0;  t(1, 1)=9.0;  t(1, 2)=9.0;
     t(2, 0)=9.0;  t(2, 1)=9.0;  t(2, 2)=0.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -781,10 +761,8 @@ void solve_3x3_NonObviousSolutionCase007_Success ()
     t(1, 0)=4.0;  t(1, 1)=3.0;  t(1, 2)=9.0;
     t(2, 0)=3.0;  t(2, 1)=4.0;  t(2, 2)=9.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -867,10 +845,9 @@ void solve_6x4_NonObviousSolutionCase008_Success ()
                                               t(5, 3)=static_cast<value_type>(5.47076e+08);
 
     munkres_cpp::replace_infinites<value_type> (t);
-    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -921,10 +898,9 @@ void solve_4x6_NonObviousSolutionCase009_Success ()
                                                                           t(3, 5)=static_cast<value_type>(5.47076e+08);
 
     munkres_cpp::replace_infinites<value_type> (t);
-    munkres_cpp::Munkres<value_type> munkres;
 
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<value_type> munkres (t);
 
     // Assert.
     EXPECT_PRED2 (MatrixCompare<TypeParam>, e, t);
@@ -949,11 +925,9 @@ void solve_3x3_NonObviousSolutionCase010_Success ()
     t(1, 0)=42;   t(1, 1)=0.0;  t(1, 2)=42;
     t(2, 0)=42;   t(2, 1)=42;   t(2, 2)=0.0;
 
-    munkres_cpp::Munkres<value_type> munkres;
-
     // Act.
     munkres_cpp::replace_infinites (t);
-    munkres.solve (t);
+    munkres_cpp::Munkres<value_type> munkres (t);
 
     // Assert.
     EXPECT_NE (0, t (0, 0) );
@@ -983,10 +957,8 @@ void solve_3x3_IsValid_Fail ()
     t(1, 0)=0.0;  t(1, 1)=1.0;  t(1, 2)=1.0;
     t(2, 0)=1.0;  t(2, 1)=1.0;  t(2, 2)=0.0;
 
-    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres;
-
     // Act.
-    munkres.solve (t);
+    munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (t);
 
     // Assert.
     const auto NotMatrixCompare = [](const TypeParam & e, const TypeParam & t){
