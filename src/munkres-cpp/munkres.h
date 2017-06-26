@@ -20,11 +20,7 @@
 #define _MUNKRES_H_
 
 #include "munkres-cpp/matrix.h"
-
-#include <list>
-#include <utility>
-#include <cmath>
-#include <limits>
+#include <forward_list>
 #include <algorithm>
 
 
@@ -173,17 +169,11 @@ int Munkres<T>::step4 ()
 {
     // Seq contains pairs of row/column values where we have found
     // either a star or a prime that is part of the ``alternating sequence``.
-    std::list<std::pair<size_t,size_t>> seq;
     // Use saverow, savecol from step 3.
-    std::pair<size_t,size_t> z0 (saverow, savecol);
-    seq.insert (seq.end (), z0);
-
-    // We have to find these two pairs:
-    std::pair<size_t,size_t> z1 (-1, -1);
-    std::pair<size_t,size_t> z2n (-1, -1);
+    std::forward_list<std::pair<size_t, size_t>> seq {{saverow, savecol}};  // z0
+    // We have to find these two pairs: z1 and z2n.
 
     size_t row, col = savecol;
-
     // Increment Set of Starred Zeros
     // 1. Construct the ``alternating sequence'' of primed and starred zeros:
     //   Z0     : Unpaired Z' from Step 4.2
@@ -191,59 +181,37 @@ int Munkres<T>::step4 ()
     //   Z[2N]  : The Z' in the row of Z[2N-1], if such a zero exists
     //   Z[2N+1]: The Z* in the column of Z[2N]
     // The sequence eventually terminates with an unpaired Z' = Z[2N] for some N.
-    bool madepair;
     do {
-        madepair = false;
-        for (row = 0; row < size; row++) {
-            if (mask_matrix (row,col) == STAR) {
-                z1.first = row;
-                z1.second = col;
-                if (std::find (seq.cbegin (), seq.cend (), z1) == seq.cend () ) {
-                    madepair = true;
-                    seq.insert (seq.end (), z1);
-                    break;
-                }
+        ROWS:
+        for (row = 0; row < size; row++)
+            if (mask_matrix (row, col) == STAR) {
+                seq.push_front ({row, col});    // z1
+                goto COLUMNS;
             }
-        }
+        break;
 
-        if (!madepair)
-            break;
-
-        madepair = false;
-
-        for (col = 0; col < size; col++) {
+        COLUMNS:
+        for (col = 0; col < size; col++)
             if (mask_matrix (row, col) == PRIME) {
-                z2n.first = row;
-                z2n.second = col;
-                if (std::find (seq.cbegin (), seq.cend (), z2n) == seq.cend () ) {
-                    madepair = true;
-                    seq.insert (seq.end (), z2n);
-                    break;
-                }
+                seq.push_front ({row, col});    // z2n
+                goto ROWS;
             }
-        }
-    } while (madepair);
+        break;
+    } while (true);
 
-    for (auto i = seq.cbegin (); i != seq.cend (); ++i) {
+    for (const auto & i : seq) {
         // 2. Unstar each starred zero of the sequence.
-        if (mask_matrix (i->first,i->second) == STAR)
-            mask_matrix (i->first,i->second) = NORMAL;
+        if (mask_matrix (i.first,i.second) == STAR)
+            mask_matrix (i.first,i.second) = NORMAL;
 
         // 3. Star each primed zero of the sequence,
         // thus increasing the number of starred zeros by one.
-        if (mask_matrix (i->first,i->second) == PRIME)
-            mask_matrix (i->first,i->second) = STAR;
+        if (mask_matrix (i.first,i.second) == PRIME)
+            mask_matrix (i.first,i.second) = STAR;
     }
 
     // 4. Erase all primes, uncover all columns and rows,
-    for (size_t col = 0; col < size; col++) {
-        for (size_t row = 0; row < size; row++) {
-            if (mask_matrix (row,col) == PRIME) {
-                mask_matrix (row,col) = NORMAL;
-            }
-        }
-    }
-
+    std::replace_if (mask_matrix.begin (), mask_matrix.end (), [](char & x){return x == PRIME;}, NORMAL);
     std::fill_n (row_mask, size, false);
     std::fill_n (col_mask, size, false);
 
