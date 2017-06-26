@@ -54,7 +54,7 @@ class matrix_eigen : public matrix_base<T>, Eigen::Matrix<T, Eigen::Dynamic, Eig
             return Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::rows ();
         }
 
-        void resize (const size_t rows, const size_t columns, const T value = matrix_base<T>::zero) override
+        void resize (const size_t rows, const size_t columns, const T value = T (0) ) override
         {
             if (rows != this->rows () || columns != this->columns () ) {
                 const auto rows_old = this->rows ();

@@ -295,7 +295,7 @@ void Munkres<T>::solve (matrix_base<T> & matrix)
     if (rows != columns) {
         // If the input matrix isn't square, make it square and fill
         // the empty values with the maximum possible value.
-        matrix.resize (size, size, matrix_base<T>::max_val);
+        matrix.resize (size, size, std::numeric_limits<T>::max () );
     }
 
 

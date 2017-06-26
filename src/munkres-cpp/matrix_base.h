@@ -36,10 +36,6 @@ class matrix_base
         // Types.
         using value_type = T;
 
-        // Constants.
-        static constexpr value_type zero = value_type (0);
-        static constexpr value_type max_val = std::numeric_limits<value_type>::max ();
-
         // Interface.
         virtual ~matrix_base () = default;
         virtual const value_type & operator () (const size_t, const size_t) const = 0;
@@ -48,7 +44,7 @@ class matrix_base
         virtual size_t rows () const = 0;
 
         // Default implementation.
-        virtual void resize (const size_t rows, const size_t columns, const value_type = zero)
+        virtual void resize (const size_t rows, const size_t columns, const value_type = value_type (0) )
         {
             if (rows != this->rows () || columns != this->columns () )
                 throw std::logic_error ("Called function with inappropriate default implementation.");
@@ -63,7 +59,7 @@ class matrix_base
         constexpr typename std::enable_if<!std::is_integral<V>::value, bool>::type
         is_zero (size_t row, size_t column) const {return FP_ZERO == std::fpclassify (operator () (row, column) );}
 
-        // Implementation of the std::iterator with begin and end functions allow to use STL algorithms.
+        // Implementation of the std::iterator with begin and end functions allow to use algorithms.
         template <typename M = matrix_base<value_type> >
         struct iterator : public std::iterator<std::input_iterator_tag, typename M::value_type>
         {
@@ -84,12 +80,6 @@ class matrix_base
         iterator<> begin () {return iterator<> {* this, 0, 0};}
         iterator<> end   () {return iterator<> {* this, rows (), 0};}
 };
-
-template<typename T>
-constexpr T matrix_base<T>::zero;
-
-template<typename T>
-constexpr T matrix_base<T>::max_val;
 
 }// namespace munkres_cpp
 

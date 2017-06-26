@@ -65,7 +65,7 @@ class matrix_std_2d_vector : public matrix_base<T>
             return data_handler.size ();
         }
 
-        void resize (const size_t rows, const size_t columns, const T value = matrix_base<T>::zero) override
+        void resize (const size_t rows, const size_t columns, const T value = T (0) ) override
         {
             data_handler.resize (rows);
             for (size_t i = 0; i < rows; ++i) {
