@@ -55,8 +55,8 @@ class Munkres
         enum MASK : char
         {
             NORMAL
-          , STAR    // STAR  == 1 == starred,
-          , PRIME   // PRIME == 2 == primed.
+          , STAR    // starred,
+          , PRIME   // primed.
         };
 };
 
@@ -170,10 +170,8 @@ int Munkres<T>::step4 ()
     // Seq contains pairs of row/column values where we have found
     // either a star or a prime that is part of the ``alternating sequence``.
     // Use saverow, savecol from step 3.
-    std::forward_list<std::pair<size_t, size_t>> seq {{saverow, savecol}};  // z0
-    // We have to find these two pairs: z1 and z2n.
+    std::forward_list<std::pair<size_t, size_t>> seq {{saverow, savecol}};
 
-    size_t row, col = savecol;
     // Increment Set of Starred Zeros
     // 1. Construct the ``alternating sequence'' of primed and starred zeros:
     //   Z0     : Unpaired Z' from Step 4.2
@@ -181,23 +179,16 @@ int Munkres<T>::step4 ()
     //   Z[2N]  : The Z' in the row of Z[2N-1], if such a zero exists
     //   Z[2N+1]: The Z* in the column of Z[2N]
     // The sequence eventually terminates with an unpaired Z' = Z[2N] for some N.
-    do {
-        ROWS:
-        for (row = 0; row < size; row++)
-            if (mask_matrix (row, col) == STAR) {
-                seq.push_front ({row, col});    // z1
-                goto COLUMNS;
-            }
-        break;
-
-        COLUMNS:
-        for (col = 0; col < size; col++)
-            if (mask_matrix (row, col) == PRIME) {
-                seq.push_front ({row, col});    // z2n
-                goto ROWS;
-            }
-        break;
-    } while (true);
+    size_t dim [] = {0, savecol};
+    const char mask [] = {STAR, PRIME};
+    for (size_t i = 0; dim [i] < size; ++dim [i]) {
+        if (mask_matrix (dim [0], dim [1]) == mask [i]) {
+            // We have to find these two pairs: z1 and z2n.
+            seq.push_front ({dim [0], dim [1]});
+            i = (i + 1) & 1;    // Switch dimension.
+            dim [i] = -1;       // After increment this value becames zero.
+        }
+    }
 
     for (const auto & i : seq) {
         // 2. Unstar each starred zero of the sequence.
