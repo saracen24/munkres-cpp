@@ -1,8 +1,8 @@
 #include <hayai.hpp>
 #include <vector>
 
-#include "matrixutils.h"
 #include "munkres-cpp/munkres.h"
+#include "../../../tests/matrix_test_utils.h"
 
 
 
@@ -34,7 +34,7 @@ BENCHMARK_F (MunkresFixture, Solve, 5000, 1)
 
 int main (int /*argc*/, char * /*argv*/ [])
 {
-    read<double>(matrices);
+    read (matrices);
 
     hayai::ConsoleOutputter consoleOutputter;
     hayai::Benchmarker::AddOutputter (consoleOutputter);

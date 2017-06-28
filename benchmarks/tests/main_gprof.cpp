@@ -1,14 +1,14 @@
 #include <vector>
 
-#include "matrixutils.h"
 #include "munkres-cpp/munkres.h"
+#include "../../../tests/matrix_test_utils.h"
 
 
 
 int main (int /*argc*/, char * /*argv*/ [])
 {
     std::vector<munkres_cpp::Matrix<double> *> matrices;
-    read<double>(matrices);
+    read (matrices);
 
 
     for (size_t i = 0; i < matrices.size (); ++i) {

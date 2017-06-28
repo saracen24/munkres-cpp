@@ -21,7 +21,7 @@
 
 #include "munkres-cpp/matrix.h"
 #include "munkres-cpp/adapters/matrix_std_2d_vector.h"
-#include <iostream>
+#include "matrix_test_utils.h"
 
 #ifdef MUNKRES_CPP_ARMADILLO
 #include "munkres-cpp/adapters/matrix_armadillo.h"
@@ -287,128 +287,33 @@ TYPED_TEST_CASE (MunkresTestFloatingResizeable, TypesFloatingResizeable);
 
 
 
-template<typename M>
-bool MatrixCompare (const M & a, const M & b)
-{
-    if (a.rows () != b.rows () || a.columns () != b.columns () ) {
-        return false;
-    }
-
-    for (unsigned int row = 0; row < a.rows (); ++row) {
-        for (unsigned int col = 0; col < a.columns (); ++col) {
-            if (a (row, col) != b (row, col) ) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-
-
-template<class T>
-std::ostream & print_matrix (std::ostream & os, const T & m)
-{
-    const std::string indent ("           ");
-    os << "Matrix (" << &m << ") of " << m.rows () << "x" << m.columns () << std::endl;
-    for (unsigned int row = 0; row < m.rows (); ++row) {
-        os << indent;
-        for (unsigned int col = 0; col < m.columns (); ++col) {
-            os << std::setw (4) << std::setfill (' ') << m (row, col) << " ";
-        }
-        os << std::endl;
-    }
-
-    return os;
-}
-
-template<class T>
-std::ostream & operator << (std::ostream & os, const munkres_cpp::Matrix<T> & m)
-{
-    return print_matrix (os, m);
-}
-
-#ifdef MUNKRES_CPP_BOOST
-template<class T>
-std::ostream & operator << (std::ostream & os, const munkres_cpp::matrix_boost<T> & m)
-{
-    return print_matrix (os, m);
-}
-#endif
-
-#ifdef MUNKRES_CPP_EIGEN3
-template<class T>
-std::ostream & operator << (std::ostream & os, const munkres_cpp::matrix_eigen<T> & m)
-{
-    return print_matrix (os, m);
-}
-#endif
-
-#ifdef MUNKRES_CPP_OPENCV
-template<class T>
-std::ostream & operator << (std::ostream & os, const munkres_cpp::matrix_opencv<T> & m)
-{
-    return print_matrix (os, m);
-}
-#endif
-
-#ifdef MUNKRES_CPP_QT
-template<class T, int N, int M>
-std::ostream & operator << (std::ostream & os, const munkres_cpp::matrix_qt<T, N, M> & m)
-{
-    return print_matrix (os, m);
-}
-#endif
-
-template<class T>
-std::ostream & operator << (std::ostream & os, const munkres_cpp::matrix_std_2d_vector<T> & m)
-{
-    return print_matrix (os, m);
-}
-
-
-
-template<typename T>
-T generateRandomMatrix (const int nrows, const int ncols)
-{
-    T matrix (nrows, ncols);
-
-    srandom ( time (nullptr) ); // Seed random number generator.
-
-    // Initialize matrix with random values.
-    for (unsigned int row = 0; row < matrix.rows (); row++)
-        for (unsigned int col = 0; col < matrix.columns (); col++)
-            matrix (row,col) = std::abs (static_cast <typename T::matrix_base::value_type> (random () ) );
-
-    return matrix;
-}
-
 template<typename T>
 void isSingleSolution (T & matrix)
 {
-    for (unsigned int row = 0; row < matrix.rows (); row++) {
+    for (size_t row = 0; row < matrix.rows (); row++) {
         int columnsolutioncount = 0;
-        for (unsigned int col = 0; col < matrix.columns (); col++)
+        for (size_t col = 0; col < matrix.columns (); col++)
             if (matrix (row,col) == 0)
                 columnsolutioncount++;
         EXPECT_EQ ( columnsolutioncount, 1 );
     }
 
-    for (unsigned int col = 0; col < matrix.columns (); col++) {
+    for (size_t col = 0; col < matrix.columns (); col++) {
         int rowsolutioncount = 0;
-        for (unsigned int row = 0; row < matrix.rows (); row++)
+        for (size_t row = 0; row < matrix.rows (); row++)
             if (matrix (row,col) == 0)
                 rowsolutioncount++;
         EXPECT_EQ ( rowsolutioncount, 1 );
     }
 }
 
+
+
 template<typename T>
 void isValidOutput (T & matrix)
 {
-    for (unsigned int row = 0; row < matrix.rows (); row++)
-        for (unsigned int col = 0; col < matrix.columns (); col++)
+    for (size_t row = 0; row < matrix.rows (); row++)
+        for (size_t col = 0; col < matrix.columns (); col++)
             EXPECT_TRUE ( matrix (row,col) == 0 || matrix (row,col) == 1 );
 }
 

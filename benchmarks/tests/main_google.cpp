@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include <vector>
 
-#include "matrixutils.h"
+#include "../../../tests/matrix_test_utils.h"
 #include "munkres-cpp/munkres.h"
 
 
@@ -10,10 +10,9 @@ std::vector<munkres_cpp::Matrix<double> *> matrices;
 
 static void MatrixNumber (benchmark::internal::Benchmark * b)
 {
-    read<double>(matrices);
-    for (int i = 0; i < static_cast <int> (matrices.size () ); ++i) {
+    read (matrices);
+    for (int i = 0; i < static_cast <int> (matrices.size () ); ++i)
         b->Arg (i);
-    }
 }
 
 

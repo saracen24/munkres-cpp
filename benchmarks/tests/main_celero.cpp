@@ -1,8 +1,8 @@
 #include <celero/Celero.h>
 #include <vector>
 
-#include "matrixutils.h"
 #include "munkres-cpp/munkres.h"
+#include "../../../tests/matrix_test_utils.h"
 
 
 
@@ -34,7 +34,7 @@ BASELINE_F (Munkres, Solve, MunkresFixture, 5000, 1)
 
 int main (int argc, char * argv [])
 {
-    read<double>(matrices);
+    read (matrices);
 
     while (i < matrices.size () ) {
         celero::Run (argc, argv);

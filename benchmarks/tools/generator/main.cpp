@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include "matrixutils.h"
+#include "../../../tests/matrix_test_utils.h"
 #include <string>
 
 
@@ -11,10 +11,10 @@ int main (int argc, char * argv [])
     for (int i = 1; i < argc; ++i) {
         const size_t size = std::stoi (argv [i]);
         munkres_cpp::Matrix<double> * matrix = new munkres_cpp::Matrix<double>;
-        *matrix = generate_random_matrix<double>(size, size);
+        *matrix = generate_random_matrix<munkres_cpp::Matrix<double> >(size, size);
         matrices.push_back (matrix);
     }
-    write<double>(matrices);
+    write (matrices);
 
     return EXIT_SUCCESS;
 }

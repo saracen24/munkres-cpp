@@ -181,7 +181,7 @@ template<typename TypeParam, size_t N>
 void solve_IsSingleSolution_Success ()
 {
     // Arrange.
-    TypeParam matrix = generateRandomMatrix<TypeParam> (N, N);
+    TypeParam matrix = generate_random_matrix<TypeParam> (N, N);
 
     // Act.
     munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (matrix);
@@ -250,7 +250,7 @@ template<typename TypeParam, size_t N>
 void solve_IsValidOutput_Success ()
 {
     // Arrange.
-    TypeParam matrix = generateRandomMatrix<TypeParam> (N, N);
+    TypeParam matrix = generate_random_matrix<TypeParam> (N, N);
 
     // Act.
     munkres_cpp::Munkres<typename TypeParam::matrix_base::value_type> munkres (matrix);
