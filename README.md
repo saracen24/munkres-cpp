@@ -59,8 +59,7 @@ Example
 
 Briefly, to solve the problem you need:  
  - set up costs into matrix class provided by the library;  
- - create solver;  
- - pass the matrix to the solver.  
+ - create solver and pass the matrix to it.  
 Thats all! Solution of the problem is stored by into input matrix.
 
 ```
@@ -70,8 +69,7 @@ munkres_cpp::Matrix<int> data {
     {1, 3}
    ,{5, 9} };
 
-munkres_cpp::Munkres<int> solver;
-solver.solve (data);
+munkres_cpp::Munkres<int> solver (data);
 ```
 
 Examples subfolder contains set of examples which step-by-step show usage of the library.
