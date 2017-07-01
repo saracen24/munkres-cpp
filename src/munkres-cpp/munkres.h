@@ -303,7 +303,7 @@ Munkres<T>::Munkres (matrix_base<T> & matrix)
 
 
     // Remove the excess rows or columns that we added to fit the input to a square matrix.
-    matrix.resize (rows, columns);
+    matrix.resize (rows, columns, 1);
 
     delete [] row_mask;
     delete [] col_mask;
