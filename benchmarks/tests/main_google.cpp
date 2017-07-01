@@ -6,7 +6,7 @@
 
 
 
-std::vector<munkres_cpp::Matrix<double> *> matrices;
+std::vector<munkres_cpp::MUNKRES_CPP_MATRIX_TYPE<MUNKRES_CPP_VALUE_TYPE> *> matrices;
 
 static void MatrixNumber (benchmark::internal::Benchmark * b)
 {
@@ -23,7 +23,7 @@ static void BM_solve (benchmark::State & state)
     while (state.KeepRunning () ) {
         auto matrix = *matrices [state.range (0)];
         state.ResumeTiming ();
-        munkres_cpp::Munkres<double> munkres (matrix);
+        munkres_cpp::Munkres<MUNKRES_CPP_VALUE_TYPE> munkres (matrix);
         state.PauseTiming ();
     }
 }

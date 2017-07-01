@@ -6,7 +6,7 @@
 
 
 
-std::vector<munkres_cpp::Matrix<double> *> matrices;
+std::vector<munkres_cpp::MUNKRES_CPP_MATRIX_TYPE<MUNKRES_CPP_VALUE_TYPE> *> matrices;
 
 size_t i {0};
 
@@ -15,24 +15,29 @@ size_t i {0};
 class MunkresFixture : public ::hayai::Fixture
 {
     public:
-        void SetUp () override
+        MunkresFixture ()
+            : matrix (1, 1)
         {
-            matrix = *matrices [i];
         }
 
-        munkres_cpp::Matrix<double> matrix;
+        void SetUp () override
+        {
+            matrix = * matrices [i];
+        }
+
+        munkres_cpp::MUNKRES_CPP_MATRIX_TYPE<MUNKRES_CPP_VALUE_TYPE> matrix;
 };
 
 
 
 BENCHMARK_F (MunkresFixture, Solve, 5000, 1)
 {
-    munkres_cpp::Munkres<double> munkres (matrix);
+    munkres_cpp::Munkres<MUNKRES_CPP_VALUE_TYPE> munkres (matrix);
 }
 
 
 
-int main (int /*argc*/, char * /*argv*/ [])
+int main (int, char **)
 {
     read (matrices);
 

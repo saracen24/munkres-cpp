@@ -128,7 +128,7 @@ std::ostream & operator << (std::ostream & os, const munkres_cpp::matrix_std_2d_
 
 
 template<typename T>
-std::istream & operator >> (std::istream & is, munkres_cpp::Matrix<T> & m)
+std::istream & read_matrix (std::istream & is, T & m)
 {
     std::string marker;
     is >> marker;
@@ -143,17 +143,70 @@ std::istream & operator >> (std::istream & is, munkres_cpp::Matrix<T> & m)
             const size_t rows = stoi (size.substr (0, delimiter) );
             const size_t columns = stoi (size.substr (delimiter + 1) );
             if (rows && columns) {
-                m.resize (rows, columns);
+                T n (rows, columns);
                 for (size_t row = 0; row < rows; ++row) {
                     for (size_t col = 0; col < columns; ++col) {
-                        is >> m (row, col);
+                        is >> n (row, col);
                     }
                 }
+                m = n;
             }
         }
     }
 
     return is;
+}
+
+template<class T>
+std::istream & operator >> (std::istream & is, munkres_cpp::Matrix<T> & m)
+{
+    return read_matrix (is, m);
+}
+
+#ifdef MUNKRES_CPP_ARMADILLO
+template<class T>
+std::istream & operator >> (std::istream & is, munkres_cpp::matrix_armadillo<T> & m)
+{
+    return read_matrix (is, m);
+}
+#endif
+
+#ifdef MUNKRES_CPP_BOOST
+template<class T>
+std::istream & operator >> (std::istream & is, munkres_cpp::matrix_boost<T> & m)
+{
+    return read_matrix (is, m);
+}
+#endif
+
+#ifdef MUNKRES_CPP_EIGEN3
+template<class T>
+std::istream & operator >> (std::istream & is, munkres_cpp::matrix_eigen<T> & m)
+{
+    return read_matrix (is, m);
+}
+#endif
+
+#ifdef MUNKRES_CPP_OPENCV
+template<class T>
+std::istream & operator >> (std::istream & is, munkres_cpp::matrix_opencv<T> & m)
+{
+    return read_matrix (is, m);
+}
+#endif
+
+#ifdef MUNKRES_CPP_QT
+template<class T, int N, int M>
+std::istream & operator >> (std::istream & is, munkres_cpp::matrix_qt<T, N, M> & m)
+{
+    return read_matrix (is, m);
+}
+#endif
+
+template<class T>
+std::istream & operator >> (std::istream & is, munkres_cpp::matrix_std_2d_vector<T> & m)
+{
+    return read_matrix (is, m);
 }
 
 
@@ -183,10 +236,10 @@ bool read (std::vector<M *> & matrices)
     std::fstream is;
     is.open (fileName, std::fstream::in);
 
-    M * matrix = new M;
-    while (is >> *matrix) {
+    M * matrix = new M (1, 1);
+    while (is >> * matrix) {
         matrices.push_back (matrix);
-        matrix = new M;
+        matrix = new M (1, 1);
     }
     delete matrix;
     is.close ();

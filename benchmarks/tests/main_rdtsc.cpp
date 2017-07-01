@@ -10,7 +10,7 @@
 
 int main (int argc, char * argv [])
 {
-    std::vector<munkres_cpp::Matrix<double> *> matrices;
+    std::vector<munkres_cpp::MUNKRES_CPP_MATRIX_TYPE<MUNKRES_CPP_VALUE_TYPE> *> matrices;
     read (matrices);
 
 
@@ -30,7 +30,7 @@ int main (int argc, char * argv [])
             for (size_t k = 0; k < iterations; ++k) {
                 auto matrix = *matrices [i];
                 uint64_t rdtsc = __rdtsc ();
-                munkres_cpp::Munkres<double> munkres (matrix);
+                munkres_cpp::Munkres<MUNKRES_CPP_VALUE_TYPE> munkres (matrix);
                 rdtsc = __rdtsc () - rdtsc;
                 rdtscMinRun = std::min (rdtscMinRun, rdtsc);
             }

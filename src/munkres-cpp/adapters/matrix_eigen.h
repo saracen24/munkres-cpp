@@ -26,7 +26,7 @@ namespace munkres_cpp
 {
 
 template<class T>
-class matrix_eigen : public matrix_base<T>, Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
+class matrix_eigen : public matrix_base<T>, public Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 {
     public:
         matrix_eigen (const size_t rows, const size_t columns)

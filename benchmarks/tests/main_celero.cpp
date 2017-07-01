@@ -6,7 +6,7 @@
 
 
 
-std::vector<munkres_cpp::Matrix<double> *> matrices;
+std::vector<munkres_cpp::MUNKRES_CPP_MATRIX_TYPE<MUNKRES_CPP_VALUE_TYPE> *> matrices;
 
 size_t i {0};
 
@@ -15,19 +15,24 @@ size_t i {0};
 class MunkresFixture : public celero::TestFixture
 {
     public:
-        void setUp (int64_t) override
+        MunkresFixture ()
+            : matrix (1, 1)
         {
-            matrix = *matrices [i];
         }
 
-        munkres_cpp::Matrix<double> matrix;
+        void setUp (int64_t) override
+        {
+            matrix = * matrices [i];
+        }
+
+        munkres_cpp::MUNKRES_CPP_MATRIX_TYPE<MUNKRES_CPP_VALUE_TYPE> matrix;
 };
 
 
 
 BASELINE_F (Munkres, Solve, MunkresFixture, 5000, 1)
 {
-     munkres_cpp::Munkres<double> munkres (matrix);
+    munkres_cpp::Munkres<MUNKRES_CPP_VALUE_TYPE> munkres (matrix);
 }
 
 

@@ -41,6 +41,19 @@ class matrix_std_2d_vector : public matrix_base<T>
             resize (rows, columns);
         }
 
+        matrix_std_2d_vector (const matrix_std_2d_vector & that)
+            : data_storage {}
+            , data_handler {data_storage}
+        {
+            this->data_storage = that.data_storage;
+        }
+
+        matrix_std_2d_vector & operator = (const matrix_std_2d_vector & that)
+        {
+            this->data_storage = that.data_storage;
+            return * this;
+        }
+
         const T & operator () (const size_t row, const size_t column) const override
         {
             return data_handler [row][column];
