@@ -1,6 +1,8 @@
 stages:
     - test
-    - full
+    - examples
+    - benchmarks
+    - cppcheck
     - image
 
 
@@ -23,8 +25,50 @@ test_job:
         - devel
 
 
-full_job:
-    stage: full
+examples_job:
+    stage: examples
+    image: registry.gitlab.com/gluttton/munkres-cpp
+    before_script:
+        - git checkout devel
+        - BUILD_DIR=`pwd`/build
+        - mkdir -p ${BUILD_DIR}
+        - cd ${BUILD_DIR}
+        - cmake ${BUILD_DIR}/..
+    script:
+        - make examples
+    only:
+        - devel
+
+
+benchmarks_job:
+    stage: benchmarks
+    image: registry.gitlab.com/gluttton/munkres-cpp
+    before_script:
+        - git checkout devel
+        - BUILD_DIR=`pwd`/build
+        - mkdir -p ${BUILD_DIR}
+        - cd ${BUILD_DIR}
+    script:
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON -DMUNKRES_CPP_MATRIX_TYPE=Matrix -DMUNKRES_CPP_VALUE_TYPE=long\ double ${BUILD_DIR}/..
+        - make benchmarks
+        - rm -rf CMake*
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON -DMUNKRES_CPP_MATRIX_TYPE=matrix_armadillo -DMUNKRES_CPP_VALUE_TYPE=double ${BUILD_DIR}/..
+        - make benchmarks
+        - rm -rf CMake*
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON -DMUNKRES_CPP_MATRIX_TYPE=matrix_opencv -DMUNKRES_CPP_VALUE_TYPE=float ${BUILD_DIR}/..
+        - make benchmarks
+        - rm -rf CMake*
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON -DMUNKRES_CPP_MATRIX_TYPE=matrix_boost -DMUNKRES_CPP_VALUE_TYPE=long\ unsigned\ int ${BUILD_DIR}/..
+        - make benchmarks
+        - rm -rf CMake*
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON -DMUNKRES_CPP_MATRIX_TYPE=matrix_eigen -DMUNKRES_CPP_VALUE_TYPE=unsigned\ int ${BUILD_DIR}/..
+        - make benchmarks
+    only:
+        - devel
+
+
+cppcheck_job:
+    stage: cppcheck
     image: registry.gitlab.com/gluttton/munkres-cpp
     before_script:
         - git checkout devel
@@ -33,8 +77,6 @@ full_job:
         - cd ${BUILD_DIR}
         - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON ${BUILD_DIR}/..
     script:
-        - make examples
-        - make benchmarks
         - make cppcheck
         - cat cppcheck.report
     only:
