@@ -155,8 +155,14 @@ void Matrix<T>::resize (const size_t rows, const size_t columns, const T default
     // Save array pointer.
     T ** new_matrix;
     // Alloc new arrays.
-    new_matrix = new T *[rows];             // Rows.
-    new_matrix[0] = new T[rows * columns];  // Columns.
+    new_matrix = new T *[rows]; // Row pointers.
+    try {
+        new_matrix[0] = new T[rows * columns];  // All data in one stripe.
+    }
+    catch (std::bad_alloc &) {
+        delete [] new_matrix;
+        throw;
+    }
     for (size_t i = 1; i < rows; i++) {
         new_matrix[i] = new_matrix[0] + i * columns;
     }

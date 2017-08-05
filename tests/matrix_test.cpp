@@ -176,6 +176,24 @@ TYPED_TEST (MunkresTestMatrixStd2dvector, resize_From2x2To4x4WithDefaultValueExp
 
 
 
+template<typename TypeParam>
+void resize_bad_alloc_Throw ()
+{
+    // Arrange.
+    TypeParam t (1, 1);
+    t(0, 0)=0.0;
+
+    // Act, Assert.
+    EXPECT_THROW (t.resize (1, std::numeric_limits<size_t>::max () ), std::bad_alloc);
+}
+
+TYPED_TEST (MunkresTestMatrixMunkres, resize_bad_alloc_Throw)
+{
+    resize_bad_alloc_Throw<TypeParam> ();
+}
+
+
+
 class MatrixTest : public ::testing::Test
 {
 };
