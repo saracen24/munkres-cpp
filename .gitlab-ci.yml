@@ -3,7 +3,6 @@ stages:
     - examples
     - benchmarks
     - cppcheck
-    - image
 
 
 test_job:
@@ -82,19 +81,3 @@ cppcheck_job:
     only:
         - devel
 
-
-image_job:
-    stage: image
-    image: docker:latest
-    variables:
-        DOCKER_DRIVER: overlay
-    services:
-        - docker:dind
-    before_script:
-        - docker info
-    script:
-        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-        - docker build -t registry.gitlab.com/gluttton/munkres-cpp .
-        - docker push registry.gitlab.com/gluttton/munkres-cpp
-    only:
-        - docker
