@@ -1,41 +1,5 @@
 stages:
-    - test
-    - full
     - image
-
-
-test_job:
-    stage: test
-    image: registry.gitlab.com/gluttton/munkres-cpp
-    before_script:
-        - git checkout devel
-        - BUILD_DIR=`pwd`/build
-        - mkdir -p ${BUILD_DIR}
-        - cd ${BUILD_DIR}
-        - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON ${BUILD_DIR}/..
-    script:
-        - make tests
-        - cd ${BUILD_DIR}/tests && ./munkrestest > /dev/null
-        - cd ${BUILD_DIR}
-        - gcovr --exclude 'tests' --exclude 'build' -r ..
-    only:
-        - devel
-
-
-full_job:
-    stage: full
-    image: registry.gitlab.com/gluttton/munkres-cpp
-    before_script:
-        - git checkout devel
-        - BUILD_DIR=`pwd`/build
-        - mkdir -p ${BUILD_DIR}
-        - cd ${BUILD_DIR}
-        - cmake -DCMAKE_BUILD_TYPE=Debug -DMUNKRESCPP_DEVEL_MODE=ON ${BUILD_DIR}/..
-    script:
-        - make examples
-        - make benchmarks
-    only:
-        - devel
 
 
 image_job:
