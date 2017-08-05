@@ -12,7 +12,7 @@ An implementation of the Kuhn–Munkres algorithm.
 License
 -------
 
-Copyright (c) 2007-2013 John Weaver and contributors.  
+Copyright (c) 2007-2017 John Weaver and contributors.  
 Licensed under the GPLv2. See the file COPYING for details.
 
 
@@ -49,8 +49,9 @@ Usage
 -----
 
 To use the project the following steps are required:  
-  - download: ```$ git clone https://github.com/saebyn/munkres-cpp.git && cd munkres-cpp```  
-  - install: ``` $ make install``` or only copy ```src/munkres-cpp``` subfolder into your project tree  
+  - download: ```$ git clone https://github.com/saebyn/munkres-cpp.git```  
+  - install: ``` $ cd munkres-cpp && make install```  
+  - or copy: ```src/munkres-cpp``` subfolder into your project tree  
 
 
 
@@ -58,19 +59,17 @@ Example
 -------
 
 Briefly, to solve the problem you need:  
- - set up costs into matrix class provided by the library;  
- - create solver and pass the matrix to it.  
-Thats all! Solution of the problem is stored by into input matrix.
-
 ```
 #include <munkres-cpp/munkres.h>
 ...
+// set cost matrix using the type provided by the library,
 munkres_cpp::Matrix<int> data {
     {1, 3}
    ,{5, 9} };
-
+// create solver and pass the matrix to it.
 munkres_cpp::Munkres<int> solver (data);
 ```
+Thats all! The library solves the problem in-place and put the solution it the input matrix.
 
 Examples subfolder contains set of examples which step-by-step show usage of the library.
 
@@ -79,12 +78,25 @@ Examples subfolder contains set of examples which step-by-step show usage of the
 Development
 -----------
 
-To prevent project complications, a separate branch `devel` is used for development.  
+The source code is managed using git. The main repository is hosted at [gitlab](https://gitlab.com/Gluttton/munkres-cpp)
+and the mirror is hosted at [github](https://github.com/Gluttton/munkres-cpp). To prevent project complications,
+a separate branch `devel` is used for development. Using of gitlab allows to implement CI process.
+The current CI implements the following steps:  
+ - get the source code from `devel` branch;  
+ - build and launch unit tests;  
+ - analyze test coverage;  
+ - build examples;  
+ - build benchmarks;  
+ - check the code with static code analyzer.
+
+CI is executed inside the Docker container. The container is created automatically by commit in `docker` branch.
+
+All CI steps are defined inside standard GitLab script: `.gitlab.yaml`.
 
 
 
 Requirements:  
- - [GCC](https://gcc.gnu.org/) (tested on 4.6.3, 4.8);  
+ - [GCC](https://gcc.gnu.org/) (tested on 4.6.3, 6.3.0);  
  - [GNU Make](https://www.gnu.org/software/make/);  
  - [CMake](http://www.cmake.org/) (2.8.12);  
  - the test suite requires the [Google C++ Test Framework](http://code.google.com/p/googletest/);  
@@ -177,4 +189,4 @@ $ make beauty
 Bug reporting and work to be done
 ---------------------------------
 
-Check the [issues list at GitHub](https://github.com/saebyn/munkres-cpp/issues?state=open).
+Check the [issues list at GitLab](https://gitlab.com/Gluttton/munkres-cpp/issues?scope=all&utf8=%E2%9C%93&state=opened).
