@@ -52,7 +52,7 @@ class Matrix : public matrix_base<T>
             assert (x < m_rows);
             assert (y < m_columns);
             assert (m_matrix != nullptr);
-            return m_matrix[x][y];
+            return m_matrix [x][y];
         };
         size_t columns () const override
         {

@@ -30,55 +30,54 @@ namespace munkres_cpp
 {
 
 template<typename T>
-class matrix_base
+struct matrix_base
 {
-    public:
-        // Types.
-        using value_type = T;
+    // Types.
+    using value_type = T;
 
-        // Interface.
-        virtual ~matrix_base () = default;
-        virtual const value_type & operator () (const size_t, const size_t) const = 0;
-        virtual value_type & operator () (const size_t, const size_t) = 0;
-        virtual size_t columns () const = 0;
-        virtual size_t rows () const = 0;
+    // Interface.
+    virtual const value_type & operator () (const size_t, const size_t) const = 0;
+    virtual value_type & operator () (const size_t, const size_t) = 0;
+    virtual size_t columns () const = 0;
+    virtual size_t rows () const = 0;
 
-        // Default implementation.
-        virtual void resize (const size_t rows, const size_t columns, const value_type = value_type (0) )
+    // Default implementation.
+    virtual ~matrix_base () = default;
+    virtual void resize (const size_t rows, const size_t columns, const value_type = value_type (0) )
+    {
+        if (rows != this->rows () || columns != this->columns () )
+            throw std::logic_error ("Called function with inappropriate default implementation.");
+    }
+
+    // Implementation.
+    template <typename V = value_type>
+    constexpr typename std::enable_if<std::is_integral<V>::value, bool>::type
+    is_zero (size_t row, size_t column) const {return operator () (row, column) == 0;}
+
+    template <typename V = value_type>
+    constexpr typename std::enable_if<!std::is_integral<V>::value, bool>::type
+    is_zero (size_t row, size_t column) const {return FP_ZERO == std::fpclassify (operator () (row, column) );}
+
+    // Allow to use standard algorithms.
+    template <typename M = matrix_base<value_type> >
+    struct iterator : public std::iterator<std::input_iterator_tag, typename M::value_type>
+    {
+        iterator (M & m, const size_t r, const size_t c) : m {m}, r {r}, c {c} {}
+        bool operator == (const iterator & that) {return this->r == that.r && this->c == that.c;}
+        bool operator != (const iterator & that) {return ! operator == (that);}
+        typename M::value_type & operator * () const {return m (r, c);}
+        iterator & operator ++ ()
         {
-            if (rows != this->rows () || columns != this->columns () )
-                throw std::logic_error ("Called function with inappropriate default implementation.");
+            r += ++c / m.columns ();
+            c  =   c % m.columns ();
+            return * this;
         }
 
-        // Implementation.
-        template <typename V = value_type>
-        constexpr typename std::enable_if<std::is_integral<V>::value, bool>::type
-        is_zero (size_t row, size_t column) const {return operator () (row, column) == 0;}
-
-        template <typename V = value_type>
-        constexpr typename std::enable_if<!std::is_integral<V>::value, bool>::type
-        is_zero (size_t row, size_t column) const {return FP_ZERO == std::fpclassify (operator () (row, column) );}
-
-        // Implementation of the std::iterator with begin and end functions allow to use algorithms.
-        template <typename M = matrix_base<value_type> >
-        struct iterator : public std::iterator<std::input_iterator_tag, typename M::value_type>
-        {
-            iterator (M & m, const size_t r, const size_t c) : m {m}, r {r}, c {c} {}
-            bool operator == (const iterator & that) {return this->r == that.r && this->c == that.c;}
-            bool operator != (const iterator & that) {return ! operator == (that);}
-            typename M::value_type & operator * () const {return m (r, c);}
-            iterator & operator ++ ()
-            {
-                r += ++c / m.columns ();
-                c  =   c % m.columns ();
-                return * this;
-            }
-
-            M & m;
-            size_t r, c;
-        };
-        iterator<> begin () {return iterator<> {* this, 0, 0};}
-        iterator<> end   () {return iterator<> {* this, rows (), 0};}
+        M & m;
+        size_t r, c;
+    };
+    iterator<> begin () {return iterator<> {* this, 0, 0};}
+    iterator<> end   () {return iterator<> {* this, rows (), 0};}
 };
 
 }// namespace munkres_cpp
