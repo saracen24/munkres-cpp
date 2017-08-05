@@ -94,7 +94,7 @@ class matrix_boost_adapter : public munkres_cpp::matrix_base<T>, boost::numeric:
 int main (int /*argc*/, char * /*argv*/[])
 {
     // Set input data (cost matrix) into your adapter.
-    matrix_boost_adapter<float> data (2, 3);
+    matrix_boost_adapter<float> data (3, 2);
     // The library can manage with non-square matrices.
     // In such case the library resize the input matrix and fill
     // new cells by sensible data.
