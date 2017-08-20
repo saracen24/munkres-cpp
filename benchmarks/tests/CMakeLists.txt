@@ -1,7 +1,3 @@
-# Common variable.
-include_directories (${PROJECT_SOURCE_DIR}/benchmarks/tools/generator)
-
-
 # Benchmark based on the Google benchmark Framework.
 ExternalProject_Add (
     benchmark
@@ -49,6 +45,7 @@ add_dependencies (munkresbenchmark_hayai.bin hayai)
 ExternalProject_Add (
     Celero
     GIT_REPOSITORY "https://github.com/DigitalInBlue/Celero.git"
+    PATCH_COMMAND eval "sed 's/CACHE.*FORCE//g' CMakeLists.txt > CMakeLists.mod && mv CMakeLists.mod CMakeLists.txt"
     CMAKE_ARGS "-DCELERO_ENABLE_EXPERIMENTS=OFF;-DCMAKE_BUILD_TYPE=Release"
     SOURCE_DIR "${PROJECT_BINARY_DIR}/Celero"
     BINARY_DIR "${PROJECT_BINARY_DIR}/CeleroBuild"
