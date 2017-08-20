@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "munkres-cpp/munkres.h"
-#include "../../../tests/matrix_test_utils.h"
+#include "../../tests/matrix_test_utils.h"
 
 
 

@@ -4,7 +4,7 @@
 #include <x86intrin.h>
 
 #include "munkres-cpp/munkres.h"
-#include "../../../tests/matrix_test_utils.h"
+#include "../../tests/matrix_test_utils.h"
 
 
 

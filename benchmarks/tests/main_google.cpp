@@ -1,8 +1,8 @@
 #include <benchmark/benchmark.h>
 #include <vector>
 
-#include "../../../tests/matrix_test_utils.h"
 #include "munkres-cpp/munkres.h"
+#include "../../tests/matrix_test_utils.h"
 
 
 
