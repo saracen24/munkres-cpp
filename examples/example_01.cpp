@@ -24,7 +24,7 @@
 
 int main (int /*argc*/, char * /*argv*/[])
 {
-    // Set input data (costs matrix) into matrix of generic type
+    // Set input data (cost matrix) into matrix of generic type
     // munkres_cpp::Matrix, which is provided by the library.
     munkres_cpp::Matrix<int> data {
     // Task I  Task II
@@ -34,12 +34,10 @@ int main (int /*argc*/, char * /*argv*/[])
     // You are totally responsible for correctness of the input data.
     // Input data must be positive and well defined (no NaN or infinity).
 
-    // Next you need create the problem solver.
-    munkres_cpp::Munkres<int> solver;
-    // And apply Munkres algorithm to data.
-    solver.solve (data);
+    // Next you need create the problem solver and pass data to it.
+    munkres_cpp::Munkres<int> solver (data);
 
-    // Now the matrix contains result.
+    // Now the matrix contains the solution of the problem.
     // Zero value represents selected values.
     // For input above data the result will be:
     // Task I  Task II

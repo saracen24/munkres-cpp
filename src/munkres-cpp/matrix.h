@@ -20,10 +20,8 @@
 #define _MATRIX_H_
 
 #include "munkres-cpp/matrix_base.h"
-#include "munkres-cpp/utils.h"
 #include <initializer_list>
-#include <cstdlib>
-#include <algorithm>
+#include <cassert>
 
 
 
@@ -54,7 +52,7 @@ class Matrix : public matrix_base<T>
             assert (x < m_rows);
             assert (y < m_columns);
             assert (m_matrix != nullptr);
-            return m_matrix[x][y];
+            return m_matrix [x][y];
         };
         size_t columns () const override
         {
@@ -85,10 +83,10 @@ Matrix<T>::Matrix (const std::initializer_list<std::initializer_list<T>> & init)
         }
     }
 
-    size_t i = 0, j;
+    size_t i = 0;
     for (auto row = init.begin (); row != init.end (); ++row, ++i) {
         assert (row->size () == m_columns);
-        j = 0;
+        size_t j = 0;
         for (auto value = row->begin (); value != row->end (); ++value, ++j) {
             m_matrix[i][j] = *value;
         }
@@ -154,14 +152,17 @@ Matrix<T>::~Matrix ()
 template<class T>
 void Matrix<T>::resize (const size_t rows, const size_t columns, const T default_value)
 {
-    assert (rows > 0);
-    assert (columns > 0);
-
     // Save array pointer.
     T ** new_matrix;
     // Alloc new arrays.
-    new_matrix = new T *[rows];             // Rows.
-    new_matrix[0] = new T[rows * columns];  // Columns.
+    new_matrix = new T *[rows]; // Row pointers.
+    try {
+        new_matrix[0] = new T[rows * columns];  // All data in one stripe.
+    }
+    catch (std::bad_alloc &) {
+        delete [] new_matrix;
+        throw;
+    }
     for (size_t i = 1; i < rows; i++) {
         new_matrix[i] = new_matrix[0] + i * columns;
     }
@@ -192,4 +193,3 @@ void Matrix<T>::resize (const size_t rows, const size_t columns, const T default
 }// namespace munkres_cpp
 
 #endif /* !defined(_MATRIX_H_) */
-

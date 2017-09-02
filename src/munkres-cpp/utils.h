@@ -1,9 +1,8 @@
 #if !defined(__MUNKRES_CPP_UTILS_H__)
 #define __MUNKRES_CPP_UTILS_H__
 
-#include <cmath>
-#include <cassert>
 #include "munkres-cpp/matrix_base.h"
+#include <algorithm>
 
 
 
@@ -11,26 +10,10 @@ namespace munkres_cpp
 {
 
 template<typename T>
-typename std::enable_if<std::is_floating_point<T>::value, void>::type
+typename std::enable_if<std::is_floating_point<T>::value>::type
 replace_infinites (matrix_base<T> & matrix)
 {
-    // Find the greatest value in the matrix that isn't infinity.
-    T max = matrix_base<T>::zero;
-    for (size_t j = 0; j < matrix.columns (); j++) {
-        for (size_t i = 0; i < matrix.rows (); i++) {
-            if (std::isfinite (matrix (i, j) ) && matrix (i, j) > max) {
-                max = std::nextafter (matrix (i, j), std::numeric_limits<T>::max () );
-            }
-        }
-    }
-
-    for (size_t j = 0; j < matrix.columns (); j++) {
-        for (size_t i = 0; i < matrix.rows (); i++) {
-            if (std::isinf (matrix (i, j) ) ) {
-                matrix (i, j) = max;
-            }
-        }
-    }
+    std::replace_if (matrix.begin (), matrix.end (), [](const T & v){return std::isinf (v);}, std::numeric_limits<T>::max () );
 }
 
 
@@ -39,30 +22,21 @@ template<typename T>
 typename std::enable_if<std::is_integral<T>::value, bool>::type
 is_data_invalid (const T & value)
 {
-    return std::numeric_limits<T>::is_signed && value < matrix_base<T>::zero;
+    return std::numeric_limits<T>::is_signed && value < T (0);
 }
 
 template<typename T>
 typename std::enable_if<!std::is_integral<T>::value, bool>::type
 is_data_invalid (const T & value)
 {
-    return value < matrix_base<T>::zero || !(std::fpclassify (value) == FP_ZERO || std::fpclassify (value) == FP_NORMAL);
+    return value < T (0) || !(std::fpclassify (value) == FP_ZERO || std::fpclassify (value) == FP_NORMAL);
 }
 
 template<typename T>
-bool is_data_valid (const matrix_base<T> & matrix)
+bool is_data_valid (/*const*/ matrix_base<T> & matrix)
 {
-    for (size_t j = 0; j < matrix.columns (); ++j) {
-        for (size_t i = 0; i < matrix.rows (); ++i) {
-            if (is_data_invalid (matrix (i, j) ) ) {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    return !std::any_of (matrix.begin (), matrix.end (), [](const T & v){return is_data_invalid<T> (v);});
 }
-
 
 }// namespace munkres_cpp
 

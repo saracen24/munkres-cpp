@@ -19,12 +19,13 @@
 
 
 // Easy way to start with munkres-cpp.
-#include "munkres-cpp/munkres.h"
+#include <munkres-cpp/munkres.h>
+#include <munkres-cpp/utils.h>
 #include <cstdlib>
 
 int main (int /*argc*/, char * /*argv*/[])
 {
-    // Set input data (costs matrix) into matrix of generic type
+    // Set input data (cost matrix) into matrix of generic type
     // munkres_cpp::Matrix, which is provided by the library.
     munkres_cpp::Matrix<int> data {
         {1,   3}
@@ -34,14 +35,13 @@ int main (int /*argc*/, char * /*argv*/[])
     // Input data must be positive and well defined (no NaN or infinity).
 
     // The library provide generic function for checking is input data
-    // correct and ready for processing.
+    // correct and ready for processing. If you not sure in correctness
+    // of the input data you should use it.
     if (munkres_cpp::is_data_valid (data) ) {
-        // Next you need create the problem solver.
-        munkres_cpp::Munkres<int> solver;
-        // And apply Munkres algorithm to data.
-        solver.solve (data);
+        // Next you need to create the problem solver and pass data to it.
+        munkres_cpp::Munkres<int> solver (data);
 
-        // Now the matrix contains result.
+        // Now the matrix contains the solution.
         // Zero value represents selected values.
         // For input above data the result will be:
         //   1,   0

@@ -22,7 +22,7 @@
 #include <munkres-cpp/munkres.h>
 // The library provides set of adapters for the most popular containers.
 // But if you need you can create adapter for any type of container by deriving
-// from base matrix class and implement the basic functions which allows navigate
+// from base matrix class and implement the basic functions which allows to navigate
 // on container and access to its data.
 #include <munkres-cpp/matrix_base.h>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -70,19 +70,18 @@ int main (int /*argc*/, char * /*argv*/[])
 {
     // Create (or use already existed) matrix of your type.
     boost::numeric::ublas::matrix<double> data (2, 2);
-    // Set input data (costs matrix).
+    // Set input data (cost matrix).
     data (0, 0) = 1.0; data (0, 1) = 3.0;
     data (1, 0) = 5.0; data (1, 1) = 9.0;
-    // Don't forget! you are responsible for correctness of the input data.
+    // Don't forget! You are responsible for correctness of the input data.
 
     // Create data adapter and pass your container to it.
     matrix_boost_adapter<double> adapter (data);
 
-    // Create the solver and apply the algorithm to data.
-    munkres_cpp::Munkres<double> solver;
-    solver.solve (adapter);
+    // Create the solver and pass data to it.
+    munkres_cpp::Munkres<double> solver (adapter);
 
-    // Now the matrix contains result.
+    // Now the matrix contains the solution.
 
     return EXIT_SUCCESS;
 }

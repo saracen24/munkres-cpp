@@ -26,6 +26,8 @@
 // on container and access to its data.
 #include <munkres-cpp/matrix_base.h>
 #include <boost/numeric/ublas/matrix.hpp>
+// Additional utils for processing floating point data.
+#include <munkres-cpp/utils.h>
 #include <cstdlib>
 
 // In general there are several approaches how to implement adapters:
@@ -91,8 +93,8 @@ class matrix_boost_adapter : public munkres_cpp::matrix_base<T>, boost::numeric:
 
 int main (int /*argc*/, char * /*argv*/[])
 {
-    // Set input data (costs matrix) into your adapter.
-    matrix_boost_adapter<float> data (2, 3);
+    // Set input data (cost matrix) into your adapter.
+    matrix_boost_adapter<float> data (3, 2);
     // The library can manage with non-square matrices.
     // In such case the library resize the input matrix and fill
     // new cells by sensible data.
@@ -108,14 +110,13 @@ int main (int /*argc*/, char * /*argv*/[])
     munkres_cpp::replace_infinites (data);
 
     // The library provide generic function for checking is input data
-    // correct and ready for processing.
+    // correct and ready for processing. If you not sure in correctness
+    // of the input data you should use it.
     if (munkres_cpp::is_data_valid (data) ) {
-        // Next you need create the problem solver.
-        munkres_cpp::Munkres<float> solver;
-        // And apply Munkres algorithm to data.
-        solver.solve (data);
+        // Next you need create the problem solver and pass data to it.
+        munkres_cpp::Munkres<float> solver (data);
 
-        // Now the matrix contains result.
+        // Now the matrix contains the solution.
         // Zero value represents selected values.
         // For input above data the result will be:
         // Task I  Task II

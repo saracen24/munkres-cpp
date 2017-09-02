@@ -25,7 +25,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "munkres-cpp/munkres.h"
+#include <munkres-cpp/munkres.h>
 
 int main (int argc, char * argv[])
 {
@@ -59,8 +59,7 @@ int main (int argc, char * argv[])
     std::cout << std::endl;
 
     // Apply Munkres algorithm to matrix.
-    munkres_cpp::Munkres<double> m;
-    m.solve (matrix);
+    munkres_cpp::Munkres<double> m (matrix);
 
     // Display solved matrix.
     for (int row = 0; row < nrows; row++) {
