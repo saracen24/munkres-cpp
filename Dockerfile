@@ -1,6 +1,6 @@
-FROM        debian:stretch
+FROM        debian:buster
 MAINTAINER  gluttton@ukr.net
-LABEL       Description="Container for building https://gitlab.com/Gluttton/munkres-cpp." Version="0.2"
+LABEL       Description="Container for building https://gitlab.com/Gluttton/munkres-cpp." Version="0.3"
 RUN         sed 's/main/main contrib non-free/g' /etc/apt/sources.list \
          && apt-get update -qq \
          && apt-get install -y -qq \
