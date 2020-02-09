@@ -1,7 +1,7 @@
 munkres-cpp
 ===========
 
-[![build status](https://gitlab.com/Gluttton/munkres-cpp/badges/devel/build.svg)](https://gitlab.com/Gluttton/munkres-cpp/commits/devel)
+[![build status](https://gitlab.com/Gluttton/munkres-cpp/badges/devel/pipeline.svg)](https://gitlab.com/Gluttton/munkres-cpp/commits/devel)
 [![coverage report](https://gitlab.com/Gluttton/munkres-cpp/badges/devel/coverage.svg)](https://gitlab.com/Gluttton/munkres-cpp/commits/devel)
 
 
